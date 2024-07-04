@@ -1,6 +1,17 @@
 package shujuku;
 
 public class TableRecord implements IPersistentStore {
+    String[][] fields;
+    String clzName;
+    Object obj;
+
+    //检查列属性是否一致类--郭拓
+    public boolean checkTabFields(){
+        ObjReflect objReflect=new ObjReflect();
+        //等待流程图...!
+        return true;
+    }
+
     // 假设主键列名称是一个字符串
     private String primaryKeyColumn;
     // 假设主键值是一个整数
