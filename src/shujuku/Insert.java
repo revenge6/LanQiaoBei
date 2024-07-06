@@ -7,6 +7,7 @@ public class DatabaseUtils {
 
     private static final String url = "url";
 
+    // 函数定义
     public boolean insert(String tableName, String[][] fields) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -37,7 +38,7 @@ public class DatabaseUtils {
 
             // 设置参数值
             for (int i = 0; i < fields.length; i++) {
-                pstmt.setString(i + 1, fields[i][2]); // 假设都是字符串类型，如果有其他类型需要适当调整
+                pstmt.setString(i + 1, fields[i][2]); // 默认字符串类型
             }
 
             // 执行插入语句
@@ -47,10 +48,10 @@ public class DatabaseUtils {
             return count > 0;
 
         } catch (SQLException e) {
-            e.printStackTrace(); // 记录输出错误信息
+            e.printStackTrace(); // 输出错误信息
             return false;
         } finally {
-            // 关闭连接
+            // 关闭连接和语句
             try {
                 if (pstmt != null) {
                     pstmt.close();
