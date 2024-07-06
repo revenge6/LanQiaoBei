@@ -3,10 +3,13 @@ package shujuku;
 import java.lang.reflect.Field;
 
 public class ObjReflect {
+    //属性类型
     String[] fieldType;
+    //属性名
     String[] fieldName;
+    //属性值
     String[] fieldValue;
-
+    //测试反射功能设置的属性
     String name="gt";
     String age="19";
     //反射函数--郭拓
@@ -25,14 +28,14 @@ public class ObjReflect {
             //属性值
             try {
                 fieldValue[i]=fields[i].get(obj).toString();
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                fieldValue[i]="";
             }
         }
     }
     public String[][] getFields(Object obj){
         reflect(obj);
-        String[][] str=new String[3][];
+        String[][] str=new String[3][];//拼接数组
         str[0]=fieldType;
         str[1]=fieldName;
         str[2]=fieldValue;

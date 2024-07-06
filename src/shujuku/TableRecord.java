@@ -4,11 +4,33 @@ public class TableRecord implements IPersistentStore {
     String[][] fields;
     String clzName;
     Object obj;
-
+    public TableRecord(Object obj){
+        this.obj=obj;
+        ObjReflect objReflect = new ObjReflect();
+        fields=objReflect.getFields(obj);
+    }
     //检查列属性是否一致类--郭拓
-    public boolean checkTabFields(){
-        ObjReflect objReflect=new ObjReflect();
-        //等待流程图...!
+    public boolean checkTabFields() {
+        //没有流程图按自己想法写
+        ObjReflect objReflect = new ObjReflect();
+        String[][] str = objReflect.getFields(obj);
+        //先判断是否属性数目想同，以免一会儿遍历出现数组越界
+        if (str[0].length != fields[0].length) {
+            return false;
+        }
+        for (int j = 0; j < str[0].length; j++) {
+            //1.检查属性类型是否一致
+            if (str[0][j] != fields[0][j]) {
+                return false;
+            }
+        }
+        for (int j = 0; j < str[1].length; j++) {
+            //2.检查属性名是否一致
+            if (str[1][j] != fields[1][j]) {
+                return false;
+            }
+        }
+        //不需要检查属性的值是否一样！
         return true;
     }
 
