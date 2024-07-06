@@ -35,6 +35,6 @@ public class TableRecord implements IPersistentStore {
         return this.primaryKeyValue;
     }
 
-    // 其他可能的方法和逻辑
+
 }
 
