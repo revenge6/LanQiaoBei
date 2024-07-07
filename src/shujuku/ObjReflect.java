@@ -33,6 +33,7 @@ public class ObjReflect {
             }
         }
     }
+    //反射获取属性数组
     public String[][] getFields(Object obj){
         reflect(obj);
         String[][] str=new String[3][];//拼接数组
@@ -41,5 +42,10 @@ public class ObjReflect {
         str[2]=fieldValue;
         return str;
     }
-
+    //反射获取类名
+    public String getClzName(Object obj){
+        Class clazz = obj.getClass();
+        String clzname=clazz.getName();
+        return clzname;
+    }
 }

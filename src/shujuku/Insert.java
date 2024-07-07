@@ -1,9 +1,11 @@
+package shujuku;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DatabaseUtils {
+class DatabaseUtils {
 
     private static final String url = "url";
 
