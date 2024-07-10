@@ -4,16 +4,13 @@ import java.lang.reflect.Field;
 
 public class ObjReflect {
     //属性类型
-    String[] fieldType;
+    static String[] fieldType;
     //属性名
-    String[] fieldName;
+    static String[] fieldName;
     //属性值
-    String[] fieldValue;
-    //测试反射功能设置的属性
-    String name="gt";
-    String age="19";
-    //反射函数--郭拓
-    private void reflect(Object obj) {
+    static String[] fieldValue;
+    //反射获取属性数组——反射
+    private static void Reflect(Object obj) {
         Class clazz = obj.getClass();
         // 获取类的属性信息
         Field[] fields = clazz.getDeclaredFields();
@@ -34,16 +31,18 @@ public class ObjReflect {
         }
     }
     //反射获取属性数组
-    public String[][] getFields(Object obj){
-        reflect(obj);
-        String[][] str=new String[3][];//拼接数组
-        str[0]=fieldType;
-        str[1]=fieldName;
-        str[2]=fieldValue;
+    public static String[][] GetFields(Object obj){
+        Reflect(obj);
+        String[][] str=new String[fieldType.length][3];//拼接数组
+        for (int i=0;i<fieldType.length;i++){
+            str[i][0]=fieldType[i];
+            str[i][1]=fieldName[i];
+            str[i][2]=fieldValue[i];
+        }
         return str;
     }
     //反射获取类名
-    public String getClzName(Object obj){
+    public static String GetClzName(Object obj){
         Class clazz = obj.getClass();
         String clzname=clazz.getName();
         return clzname;
