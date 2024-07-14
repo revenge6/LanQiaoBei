@@ -4,6 +4,7 @@ public class Service {
 
     public Service(String url){
         setURL(url);
+        DataBase.InitialTable();
     }
     public static void setURL(String url){
         DataBase.url=url;

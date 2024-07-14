@@ -1,7 +1,7 @@
 package shujuku;
 
 import java.sql.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TableStructure {
@@ -27,7 +27,7 @@ public class TableStructure {
             // 创建二维字符串数组来保存列头和列数据类型
             //String[][] columns = new String[columnCount][2];
             //List<FieldInfo> columns=new ArrayList<>();
-            Map<String,String> columns=new HashMap<>();
+            Map<String,String> columns=new LinkedHashMap<>();
             // 遍历结果集并将列头和列数据类型保存到数组中
             while (resultSet.next()) {
                 columns.put(resultSet.getString("name"),resultSet.getString("type"));
@@ -48,6 +48,8 @@ public class TableStructure {
                     columns.remove(fields[i][1]);
                     //更新列，列属性更改为fields[i][0]
                     UpdateList(tableName,fields[i][1],fields[i][0]);
+                }else {
+                    columns.remove(fields[i][1]);
                 }
             }
             //遍历columns，删除其中的列
@@ -117,7 +119,7 @@ public class TableStructure {
             // 创建Statement对象来执行SQL语句
             Statement stmt=conn.createStatement();
 
-            String sql="alter table "+tableName+" drop column "+list;
+            String sql="alter table "+tableName+" drop column "+list+";";
             int count=stmt.executeUpdate(sql);
             stmt.close();
             conn.close();

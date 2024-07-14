@@ -197,8 +197,8 @@ public class DataBase {
         return true;
     }
 
+    //检查列属性是否一致类(考虑顺序)--gt
 
-    //检查列属性是否一致类--gt
     public static boolean CheckTabFields(String tableName, String[][] fields) {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -207,7 +207,7 @@ public class DataBase {
             Statement stmt = conn.createStatement();
 
             //1.获取类对应的类表的列头
-            ResultSet resultSet = stmt.executeQuery("PRAGMA table_info( " + tableName + " )");
+            ResultSet resultSet = stmt.executeQuery("pragma table_info( " + tableName + " )");
             // 获取结果集的列数
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
@@ -242,6 +242,84 @@ public class DataBase {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    //系统表更新系列函数  蒋梦圆
+    //1 增加一列的系统表更新  这一列不能是主键
+    public static boolean Add_columns(String clzName,String[][] newCols,String fields[][]){
+        //insert into 表名 values(值1,值2,...值n);
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();//数据库连接
+            for(int i=0;i<fields.length;i++) {
+                String sql="insert into Attribute values("+clzName+","+newCols[i][1]+","+"0"+newCols[i][0]+")"+";";
+                stmt.executeUpdate(sql);
+            }
+            stmt.close();
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            return false;
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+    //2 删除列
+    public static boolean Del_columns(String clzName,String[][] newCols,String[][] fields){
+        //delete from 表名 where 列名  = 值;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();//数据库连接
+            for(int i=0;i<fields.length;i++) {
+                String sql="delete from Attribute where clzName="+clzName+"and attitudeName="+newCols[i][1] +";";
+                stmt.executeUpdate(sql);
+                stmt.close();
+                conn.close();
+            }
+        } catch (ClassNotFoundException e) {
+            return false;
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+    public static boolean Update_datatype(String clzName,String[][] updateCols,String[][] fields){
+        //update 表名 set 列名 = 值 where 列名=值
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();//数据库连接
+            for(int i=0;i<fields.length;i++) {
+                String sql="delete from Attribute set attitudeType= '"+updateCols[i][0]+"' where clzName="+clzName+" and attitudeName="+updateCols[i][1] +";";
+                stmt.executeUpdate(sql);
+                stmt.close();
+                conn.close();
+            }
+
+        } catch (ClassNotFoundException e) {
+            return false;
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+    public static boolean Del_table(String tableName){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();//数据库连接
+            String sql="drop table "+tableName+";";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            return false;
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
 }
