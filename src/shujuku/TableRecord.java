@@ -57,7 +57,7 @@ public class TableRecord {
         }
     }
 
-    //更新函数——wmy
+    //更新函数——wym
 //    public void Update(IPersistentStore store) {
 //        try{
 //            Class.forName("org.sqlite.JDBC");
