@@ -1,5 +1,5 @@
 package shujuku;
-
+//lab
 public interface IPersistentStore {
     String persistentStorePriKey = "";
     String priKeyValue="";
