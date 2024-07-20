@@ -20,10 +20,8 @@ public class TableRecord {
             // 创建Statement对象来执行SQL语句
             Statement stmt=conn.createStatement();
             // 构造插入表SQL语句
-
             //这里需要考虑属性不为int时需要加单引号！！！
-
-            String sql = "insert into "+tableName+" (";
+            String sql = "INSERT INTO "+tableName+" (";
             for (int i = 0; i < fields.length; i++) {
                 sql+=fields[i][1];
                 if (i < fields.length - 1) {
@@ -32,24 +30,24 @@ public class TableRecord {
             }
             sql+=") values (";
             for (int i = 0; i < fields.length; i++) {
-                if(fields[i][0]!="int")
+                boolean flag=DataBase.kindSwitch.get(fields[i][0])=="INTEGER"||DataBase.kindSwitch.get(fields[i][0])=="REAL";
+                if(!flag)
                     sql+="'";
                 sql+=fields[i][2];
-                if(fields[i][0]!="int")
+                if(!flag)
                     sql+="'";
                 if (i != fields.length-1) {
                     sql+=",";
                 }
             }
             sql+=");";
-            // 执行插入语句
             int count=stmt.executeUpdate(sql);
             // 检查是否成功插入数据
             stmt.close();
             conn.close();
             return count > 0;
         } catch (SQLException e) {
-            e.printStackTrace(); // 输出错误信息
+            System.out.println("插入对象失败，已添加过相同主键值对象！");
             return false;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

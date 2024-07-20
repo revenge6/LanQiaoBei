@@ -24,9 +24,12 @@ public class ObjReflect {
             fieldName[i]=fields[i].getName();
             //属性值
             try {
+                if(!fields[i].isAccessible()) {
+                    fields[i].setAccessible(true);
+                }
                 fieldValue[i]=fields[i].get(obj).toString();
             } catch (Exception e) {
-                fieldValue[i]="";
+                fieldValue[i]=null;
             }
         }
     }

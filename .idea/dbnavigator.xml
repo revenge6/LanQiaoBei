@@ -17,7 +17,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="e46c0daa-7877-4be1-b00d-e87f360356b0">
-      <console name="Connection" type="STANDARD" schema="" session="Main" />
+      <console name="Connection" type="STANDARD" schema="test" session="Main"><![CDATA[select * from "Attribute";]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -25,17 +25,22 @@
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/shujuku$GtTest" />
-      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/Map" />
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="consoles/Connection" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="e46c0daa-7877-4be1-b00d-e87f360356b0" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.shujuku$GtTestTemp" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Xuliehua" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Map" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.shujuku$GtTest" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Attribute" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.gt" active-filter-id="EMPTY_FILTER" />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
@@ -536,5 +541,9 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
+    <execution-variable-types />
   </component>
 </project>
