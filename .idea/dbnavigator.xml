@@ -17,7 +17,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="e46c0daa-7877-4be1-b00d-e87f360356b0">
-      <console name="Connection" type="STANDARD" schema="test" session="Main"><![CDATA[select * from "Attribute";]]></console>
+      <console name="Connection" type="STANDARD" schema="test" session="Main"><![CDATA[delete from shujuku$GtTest where id = 1;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -25,7 +25,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="consoles/Connection" />
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/shujuku$GtTest" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -114,7 +114,7 @@
           <tcp-port-to value="4999" />
           <debugger-type value="ASK" />
         </debugger>
-        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
+        <object-filters hide-empty-schemas="true" hide-pseudo-columns="false" hide-audit-columns="false">
           <object-filters />
           <object-type-filter use-master-settings="true">
             <object-type name="SCHEMA" enabled="true" />

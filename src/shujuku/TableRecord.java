@@ -20,7 +20,6 @@ public class TableRecord {
             // 创建Statement对象来执行SQL语句
             Statement stmt=conn.createStatement();
             // 构造插入表SQL语句
-            //这里需要考虑属性不为int时需要加单引号！！！
             String sql = "INSERT INTO "+tableName+" (";
             for (int i = 0; i < fields.length; i++) {
                 sql+=fields[i][1];
@@ -30,12 +29,8 @@ public class TableRecord {
             }
             sql+=") values (";
             for (int i = 0; i < fields.length; i++) {
-                boolean flag=DataBase.kindSwitch.get(fields[i][0])=="INTEGER"||DataBase.kindSwitch.get(fields[i][0])=="REAL";
-                if(!flag)
-                    sql+="'";
-                sql+=fields[i][2];
-                if(!flag)
-                    sql+="'";
+                //boolean flag=DataBase.kindSwitch.get(fields[i][0])=="INTEGER"||DataBase.kindSwitch.get(fields[i][0])=="REAL";
+                sql+="'"+fields[i][2]+"'";
                 if (i != fields.length-1) {
                     sql+=",";
                 }
@@ -55,52 +50,54 @@ public class TableRecord {
         }
     }
 
+    //删除一个对象——lab
+    public static boolean Delete(String tableName,String priKey,String priKeyValue) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+
+            // 构建删除SQL语句
+//            String kind=DataBase.kindSwitch.get("1");
+//            boolean flag=kind=="INTEGER"||kind=="REAL";
+            String sql = "delete from " + tableName + " where " + priKey + "='" + priKeyValue + "';";
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            conn.close();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
     //更新函数——wym
-//    public void Update(IPersistentStore store) {
-//        try{
-//            Class.forName("org.sqlite.JDBC");
-//            Connection conn = DriverManager.getConnection(url);
-//            // 创建Statement对象来执行SQL语句
-//            Statement stmt=conn.createStatement();
-//
-//            String persistentStorePriKey=store.getPriKey();
-//            String priKeyValue=store.getPriKeyValue();
-//            ObjReflect objReflect = new ObjReflect();
-//            //获取对象类名
-//            String clzName=objReflect.GetClzName(store);
-//            //获取对象属性数组
-//            String[][] fields=objReflect.GetFields(store);
-//            //在Map表中找到tableName
-//            String str="select tableName from Map where clzName= '"+clzName+"';";
-//            ResultSet rs=stmt.executeQuery(str);
-//            String tableName="";
-//            if (rs.next())
-//                tableName=rs.getString("tableName");
-//
-//            String sql="select "+persistentStorePriKey+" from "+tableName+" where persistentStorePriKey='"+priKeyValue+"';";
-//            ResultSet rs1=stmt.executeQuery(str);
-//            //根据结果集结果判断是否类表中有这一行元素
-//            if (rs1.next()){
-//                String upd = "update " + clzName + "set ";
-//                for(int i=0;i<fields[0].length;i++){
-//                    upd+=fields[i][1]+"="+fields[i][2];
-//                    if(i!=fields[0].length)
-//                        upd+=",";
-//                }
-//                upd+=" where persistentStorePriKey='" + priKeyValue +"';";
-//                stmt.executeUpdate(upd);
-//            }{
-//                //如果没有则执行插入
-//                insert(clzName,fields);
-//            }
-//            stmt.close();
-//            conn.close();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public static boolean Update(String tableName,String[][] fields) {
+        try{
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            // 创建Statement对象来执行SQL语句
+            Statement stmt=conn.createStatement();
+
+            String sql="update "+tableName+" set ";
+            for (int i=0;i<fields.length;i++){
+                sql+=fields[i][1]+"='"+fields[i][2]+"'";
+                if(i!= fields.length-1)
+                    sql+=",";
+            }
+            sql+=" where "+fields[0][1]+"='"+fields[0][2]+"';";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            conn.close();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
 //    public void Update(Object obj, String persistentStorePriKey, String priKeyValue) {
 //        try{
 //            Class.forName("org.sqlite.JDBC");
@@ -146,40 +143,8 @@ public class TableRecord {
 //    }
 
 }
-//删除一个对象——lab
-//
-//public void Delete(IPersistentStore store) {
-//    try {
-//        Class.forName("org.sqlite.JDBC");
-//        Connection conn = DriverManager.getConnection(url);
-//        Statement stmt = conn.createStatement();
-//
-//        String persistentStorePriKey = store.getPriKey();
-//        String priKeyValue = store.getPriKeyValue();
-//        ObjReflect objReflect = new ObjReflect();
-//        String clzName = objReflect.GetClzName(store);
-//
-//        // 获取tableName
-//        String str = "select tableName from Map where clzName='" + clzName + "';";
-//        ResultSet rs = stmt.executeQuery(str);
-//        String tableName = "";
-//        if (rs.next()) {
-//            tableName = rs.getString("tableName");
-//        }
-//
-//        // 构建删除SQL语句
-//        String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
-//        stmt.executeUpdate(sql);
-//
-//        stmt.close();
-//        conn.close();
-//    } catch (SQLException e) {
-//        throw new RuntimeException(e);
-//    } catch (ClassNotFoundException e) {
-//        throw new RuntimeException(e);
-//    }
-//}
-//
+
+
 //public void Delete(Object obj, String persistentStorePriKey, String priKeyValue) {
 //    try {
 //        Class.forName("org.sqlite.JDBC");

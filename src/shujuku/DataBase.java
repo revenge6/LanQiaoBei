@@ -19,12 +19,14 @@ public class DataBase {
             Statement stmt = conn.createStatement();
             //构造删除表语句并执行
             String sql="drop table "+tableName+";";
-            stmt.execute(sql);
+            stmt.executeUpdate(sql);
+            if(tableName=="Map"||tableName=="Attribute")
+                return true;
             String clzName=GetClzName(tableName);
             String sqlDM="delete from Map where tableName ='"+tableName+"';";
-            stmt.execute(sqlDM);
+            stmt.executeUpdate(sqlDM);
             String sqlDA="delete from Attribute where clzName='"+clzName+"';";
-            stmt.execute(sqlDA);
+            stmt.executeUpdate(sqlDA);
             stmt.close();
             conn.close();
             return true;
@@ -273,7 +275,7 @@ public class DataBase {
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();//数据库连接
             for(int i=0;i<fields.length;i++) {
-                String sql="insert into Attribute values("+clzName+","+newCols[i][1]+","+"0"+newCols[i][0]+")"+";";
+                String sql="insert into Attribute values('"+clzName+"','"+newCols[i][1]+"','"+"0"+"','"+newCols[i][0]+"');";
                 stmt.executeUpdate(sql);
             }
             stmt.close();
