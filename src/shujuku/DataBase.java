@@ -202,7 +202,7 @@ public class DataBase {
     //    (值2_1, 值2_2, 值2_3, ...),
     //    ...
     //    (值N_1, 值N_2, 值N_3, ...);
-    public static boolean UpdateSystemTable(String[][] fields, String clzName, String tableName) {
+    public static boolean UpdateSystemTable(String[][] fields,String clzName,String tableName) {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -230,7 +230,7 @@ public class DataBase {
         return true;
     }
     //检查列属性是否一致类(考虑顺序)--gt
-    public static boolean CheckTabFields(String tableName, String[][] fields) {
+    public static boolean CheckTabFields(String tableName,String[][] fields) {
         try {
             //连接数据库
             Class.forName("org.sqlite.JDBC");

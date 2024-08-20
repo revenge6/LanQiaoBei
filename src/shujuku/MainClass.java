@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class MainClass {
 
-    private Map<String, String> map; //系统表 map???
+    private Map<String,String> map; //系统表 map???
 
     // 第一个函数 Select,传入类名主键名主键值
     public Object Select(String clzName, String persistentStorePriKey, Object priKeyValue) {
@@ -108,14 +108,5 @@ public class MainClass {
     // 构造 SQL 查询语句，根据对象的属性值作为条件
     private String constructSQL(Object obj, String tablename) {
         return "SELECT * FROM " + tablename + " WHERE ..."; // 构造 SQL语句
-    }
-    interface IPersistentStore {
-        String persistentStorePriKey = "";
-        String priKeyValue="";
-        // 定义一个方法，返回主键列的名称
-        String getPriKey();
-
-        // 定义一个方法，返回主键的值
-        String getPriKeyValue();
     }
 }

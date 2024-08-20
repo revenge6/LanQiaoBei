@@ -5,7 +5,7 @@ import java.sql.*;
 public class TableRecord {
     static String url;
     DataBase dataBase;
-    TableRecord(DataBase dataBase){
+    public TableRecord(DataBase dataBase){
         if(dataBase.url==""||dataBase.url==null)
             return;
         url=dataBase.url;

@@ -10,7 +10,7 @@ public class TableStructure {
     static String url;
     DataBase dataBase;
 
-    TableStructure(DataBase dataBase) {
+    public TableStructure(DataBase dataBase) {
         if (DataBase.url == "" || DataBase.url == null)
             return;
         url = DataBase.url;
