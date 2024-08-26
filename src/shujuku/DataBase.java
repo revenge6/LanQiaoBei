@@ -189,12 +189,42 @@ public class DataBase {
             return false;
         } catch (SQLException e) {
             System.out.println("创建表失败！"+e.getMessage());
-//            throw new RuntimeException();
         }
         //更新系统表
         return UpdateSystemTable(fields, clzName, switchTableName(clzName));
     }
-
+    //创建表函数
+    public static boolean CreateTempTable(String clzName, String[][] fields) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            //表名转换
+            String tableName = "temp_"+switchTableName(clzName);
+            // 创建类数据表SQL语句并执行
+            String sql = "create table if not exists " + tableName + " (";
+            for (int i = 0; i < fields.length; i++) {
+                //数据类型转换！
+                String kind=kindSwitch.get(fields[i][0])!=null?kindSwitch.get(fields[i][0]):"NONE";
+                if (i == 0)
+                    sql = sql + fields[i][1] + " " + kind + " primary key,";
+                else if (i == fields.length - 1)
+                    sql = sql + fields[i][1] + " " + kind + ");";
+                else
+                    sql = sql + fields[i][1] + " " + kind + ",";
+            }
+            stmt.execute(sql);
+            // 关闭资源
+            stmt.close();
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            return false;
+        } catch (SQLException e) {
+            System.out.println("创建表失败！"+e.getMessage());
+        }
+        //更新系统表
+        return UpdateSystemTable(fields, clzName, switchTableName(clzName));
+    }
     //更新Map和Attribute
     //更新属性表 INSERT INTO 表名 (列1, 列2, 列3, ...)
     //VALUES
@@ -337,5 +367,24 @@ public class DataBase {
             return false;
         }
         return true;
+    }
+    //改主键-1
+    public static boolean AlterKey(String clzName,String tableName,String pastKey,String newKey){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();//数据库连接
+            String sqlAK1="update "+tableName+" set isKey= '0' where clzName = '"+clzName+"' and attitudeName = '"+pastKey+"';";
+            String sqlAK2="update "+tableName+" set isKey= '1' where clzName = '"+clzName+"' and attitudeName = '"+newKey+"';";
+            stmt.executeUpdate(sqlAK1);
+            stmt.executeUpdate(sqlAK2);
+            stmt.close();
+            conn.close();
+            return true;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            return false;
+        }
     }
 }
