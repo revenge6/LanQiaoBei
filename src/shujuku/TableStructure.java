@@ -188,19 +188,19 @@ public class TableStructure {
     }
 
     //改主键-2
-    public static boolean AlterKey(String clzName,String tableName,String pastKey,String newKey){
-        try{
-            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection(url);
-            Statement stmt = conn.createStatement();
-
-            //DataBase.CreateTempTable(clzName,);
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static boolean AlterKey(String clzName,String tableName,String pastKey,String newKey){
+//        try{
+//            Class.forName("org.sqlite.JDBC");
+//            Connection conn = DriverManager.getConnection(url);
+//            Statement stmt = conn.createStatement();
+//
+//            //DataBase.CreateTempTable(clzName,);
+//            return true;
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 }
