@@ -194,7 +194,8 @@ public class TableStructure {
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();
 
-            DataBase.CreateTempTable(clzName,);
+            //DataBase.CreateTempTable(clzName,);
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
