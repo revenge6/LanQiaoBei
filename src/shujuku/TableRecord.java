@@ -72,6 +72,63 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
+    public void Delete(Object obj, String persistentStorePriKey, String priKeyValue) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+
+            ObjReflect objReflect = new ObjReflect();
+            String clzName = objReflect.GetClzName(obj);
+
+            // 获取tableName
+            String str = "select tableName from Map where clzName='" + clzName + "';";
+            ResultSet rs = stmt.executeQuery(str);
+            String tableName = "";
+            if (rs.next()) {
+                tableName = rs.getString("tableName");
+            }
+
+            // 构建删除SQL语句
+            String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void Delete(Class<?> clz, String persistentStorePriKey, String priKeyValue) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+
+            // 获取tableName
+            String str = "select tableName from Map where clzName='" + clz.getName() + "';";
+            ResultSet rs = stmt.executeQuery(str);
+            String tableName = "";
+            if (rs.next()) {
+                tableName = rs.getString("tableName");
+            }
+
+            // 构建删除SQL语句
+            String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //更新函数——wym
     public static boolean Update(String tableName,String[][] fields) {
         try{
@@ -145,59 +202,3 @@ public class TableRecord {
 }
 
 
-//public void Delete(Object obj, String persistentStorePriKey, String priKeyValue) {
-//    try {
-//        Class.forName("org.sqlite.JDBC");
-//        Connection conn = DriverManager.getConnection(url);
-//        Statement stmt = conn.createStatement();
-//
-//        ObjReflect objReflect = new ObjReflect();
-//        String clzName = objReflect.GetClzName(obj);
-//
-//        // 获取tableName
-//        String str = "select tableName from Map where clzName='" + clzName + "';";
-//        ResultSet rs = stmt.executeQuery(str);
-//        String tableName = "";
-//        if (rs.next()) {
-//            tableName = rs.getString("tableName");
-//        }
-//
-//        // 构建删除SQL语句
-//        String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
-//        stmt.executeUpdate(sql);
-//
-//        stmt.close();
-//        conn.close();
-//    } catch (SQLException e) {
-//        throw new RuntimeException(e);
-//    } catch (ClassNotFoundException e) {
-//        throw new RuntimeException(e);
-//    }
-//}
-//
-//public void Delete(Class<?> clz, String persistentStorePriKey, String priKeyValue) {
-//    try {
-//        Class.forName("org.sqlite.JDBC");
-//        Connection conn = DriverManager.getConnection(url);
-//        Statement stmt = conn.createStatement();
-//
-//        // 获取tableName
-//        String str = "select tableName from Map where clzName='" + clz.getName() + "';";
-//        ResultSet rs = stmt.executeQuery(str);
-//        String tableName = "";
-//        if (rs.next()) {
-//            tableName = rs.getString("tableName");
-//        }
-//
-//        // 构建删除SQL语句
-//        String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
-//        stmt.executeUpdate(sql);
-//
-//        stmt.close();
-//        conn.close();
-//    } catch (SQLException e) {
-//        throw new RuntimeException(e);
-//    } catch (ClassNotFoundException e) {
-//        throw new RuntimeException(e);
-//    }
-//}
