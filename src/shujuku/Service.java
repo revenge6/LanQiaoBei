@@ -93,10 +93,19 @@ public class Service {
         }
         return TableRecord.Delete(tableName,priKey,priKeyValue);
     }
-    public boolean Delete(Object obj,String priKey,String priKeyValue){
+    public boolean Delete(Object obj){
         String clzName=ObjReflect.GetClzName(obj);
         String tableName=DataBase.GetTableName(clzName);
-
+        String[][] fields=ObjReflect.GetFields(obj);
+        //补：插入额外字节数组列objBytes
+        if(tableName=="") {
+            System.out.println("还未创建此类的表！");
+            return false;
+        }
+        return TableRecord.Delete(tableName,fields);
+    }
+    public boolean Delete(String clzName,String priKey,String priKeyValue){
+        String tableName=DataBase.GetTableName(clzName);
         //补：插入额外字节数组列objBytes
         if(tableName=="") {
             System.out.println("还未创建此类的表！");
@@ -104,6 +113,7 @@ public class Service {
         }
         return TableRecord.Delete(tableName,priKey,priKeyValue);
     }
+
     public boolean Update(IPersistentStore store){
         String clzName=ObjReflect.GetClzName(store);
         String tableName=DataBase.GetTableName(clzName);

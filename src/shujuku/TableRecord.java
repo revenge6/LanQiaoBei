@@ -57,9 +57,6 @@ public class TableRecord {
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();
 
-            // 构建删除SQL语句
-//            String kind=DataBase.kindSwitch.get("1");
-//            boolean flag=kind=="INTEGER"||kind=="REAL";
             String sql = "delete from " + tableName + " where " + priKey + "='" + priKeyValue + "';";
             stmt.executeUpdate(sql);
 
@@ -67,11 +64,63 @@ public class TableRecord {
             conn.close();
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+    public static boolean Delete(String tableName,String[][] fields) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+
+            String sql = "delete from " + tableName + " where ";
+            for (int i=0;i< fields[0].length;i++){
+                sql+=fields[i][1]+" = '"+fields[i][2]+"'";
+                if(i< fields[0].length-1)
+                    sql+=",";
+            }
+            sql+=";";
+
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            conn.close();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+//    public void Delete(Class<?> clz, String persistentStorePriKey, String priKeyValue) {
+//        try {
+//            Class.forName("org.sqlite.JDBC");
+//            Connection conn = DriverManager.getConnection(url);
+//            Statement stmt = conn.createStatement();
+//
+//            // 获取tableName
+//            String str = "select tableName from Map where clzName='" + clz.getName() + "';";
+//            ResultSet rs = stmt.executeQuery(str);
+//            String tableName = "";
+//            if (rs.next()) {
+//                tableName = rs.getString("tableName");
+//            }
+//
+//            // 构建删除SQL语句
+//            String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
+//            stmt.executeUpdate(sql);
+//
+//            stmt.close();
+//            conn.close();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
     //更新函数——wym
     public static boolean Update(String tableName,String[][] fields) {
         try{
@@ -145,59 +194,3 @@ public class TableRecord {
 }
 
 
-//public void Delete(Object obj, String persistentStorePriKey, String priKeyValue) {
-//    try {
-//        Class.forName("org.sqlite.JDBC");
-//        Connection conn = DriverManager.getConnection(url);
-//        Statement stmt = conn.createStatement();
-//
-//        ObjReflect objReflect = new ObjReflect();
-//        String clzName = objReflect.GetClzName(obj);
-//
-//        // 获取tableName
-//        String str = "select tableName from Map where clzName='" + clzName + "';";
-//        ResultSet rs = stmt.executeQuery(str);
-//        String tableName = "";
-//        if (rs.next()) {
-//            tableName = rs.getString("tableName");
-//        }
-//
-//        // 构建删除SQL语句
-//        String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
-//        stmt.executeUpdate(sql);
-//
-//        stmt.close();
-//        conn.close();
-//    } catch (SQLException e) {
-//        throw new RuntimeException(e);
-//    } catch (ClassNotFoundException e) {
-//        throw new RuntimeException(e);
-//    }
-//}
-//
-//public void Delete(Class<?> clz, String persistentStorePriKey, String priKeyValue) {
-//    try {
-//        Class.forName("org.sqlite.JDBC");
-//        Connection conn = DriverManager.getConnection(url);
-//        Statement stmt = conn.createStatement();
-//
-//        // 获取tableName
-//        String str = "select tableName from Map where clzName='" + clz.getName() + "';";
-//        ResultSet rs = stmt.executeQuery(str);
-//        String tableName = "";
-//        if (rs.next()) {
-//            tableName = rs.getString("tableName");
-//        }
-//
-//        // 构建删除SQL语句
-//        String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
-//        stmt.executeUpdate(sql);
-//
-//        stmt.close();
-//        conn.close();
-//    } catch (SQLException e) {
-//        throw new RuntimeException(e);
-//    } catch (ClassNotFoundException e) {
-//        throw new RuntimeException(e);
-//    }
-//}
