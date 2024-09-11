@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DataBase {
-    static String url = "jdbc:sqlite:\\\\D:\\\\java\\\\idea-workspace\\\\LanQiaoBei\\\\test.db\\\\";//数据库链接
+    static String url = "jdbc:sqlite:\\D:\\java\\idea-workspace\\LanQiaoBei\\test.db";//数据库链接
 
     public DataBase(String url) {
         this.url = url;
