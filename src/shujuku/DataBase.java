@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DataBase {
-    static String url = "";//数据库链接
+    static String url = "jdbc:sqlite:\\\\D:\\\\java\\\\idea-workspace\\\\LanQiaoBei\\\\test.db\\\\";//数据库链接
 
     public DataBase(String url) {
         this.url = url;
@@ -299,7 +299,7 @@ public class DataBase {
     //系统表更新系列函数  蒋梦圆
     //1 增加一列的系统表更新  这一列不能是主键
     public static boolean Add_columns(String clzName,String[][] newCols,String fields[][]){
-        //insert into 表名 values(值1,值2,...值n);
+//insert into 表名 values(值1,值2,...值n);
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -385,6 +385,71 @@ public class DataBase {
             throw new RuntimeException(e);
         } catch (SQLException e) {
             return false;
+        }
+    }
+    public static boolean Add_columns(String clzname, String[][] newCols) {
+        Connection conn = null;
+        Statement stmt = null;
+        boolean add_columns = false;
+        try {
+            // 注册SQLite JDBC驱动
+            Class.forName("org.sqlite.JDBC");
+            // 连接到数据库
+            conn = DriverManager.getConnection(url);
+            stmt = conn.createStatement();
+            String tablename=DataBase.GetTableName(clzname);
+
+            // 循环处理每个要添加的列
+            for (int i = 0; i < newCols.length; i++) {
+                String colType = newCols[i][0];
+                String colName = newCols[i][1];
+
+                // 构建添加列的SQL语句
+                String addColumnSql = "ALTER TABLE " + tablename + " ADD COLUMN " + colName + " " + colType;
+                // 执行SQL语句
+                stmt.executeUpdate(addColumnSql);
+
+                // 如果成功添加列，修改主键属性
+                if (colName.equals("primary_key_column_name")) {
+                    String setPrimaryKeySql = "UPDATE clz_table SET isprimaryKey = true WHERE column_name = '" + colName + "'";
+                    stmt.executeUpdate(setPrimaryKeySql);
+                }
+            }
+
+            add_columns = true; // 操作成功返回值为true
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭数据库连接和资源
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return add_columns; // 返回操作结果
+    }
+
+    public static void main(String[] args) {
+        // 测试
+        String clzname = "shujuku.GtTest"; // clzname
+        String[][] newCols = {
+                {"INT", "new_column1"}, // 添加一个名为new_column1，类型为INT的列
+        };
+
+        boolean result = Add_columns(clzname, newCols);
+        if (result) {
+            System.out.println("列添加成功");
+        } else {
+            System.out.println("列添加失败");
         }
     }
 }
