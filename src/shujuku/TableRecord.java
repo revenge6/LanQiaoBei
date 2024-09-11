@@ -76,10 +76,10 @@ public class TableRecord {
             Statement stmt = conn.createStatement();
 
             String sql = "delete from " + tableName + " where ";
-            for (int i=0;i< fields[0].length;i++){
+            for (int i=0;i< fields.length;i++){
                 sql+=fields[i][1]+" = '"+fields[i][2]+"'";
-                if(i< fields[0].length-1)
-                    sql+=",";
+                if(i< fields.length-1)
+                    sql+=" and ";
             }
             sql+=";";
 

@@ -9,6 +9,24 @@
     <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
+  <component name="DBNavigator.Project.DataExportManager">
+    <export-instructions>
+      <create-header value="true" />
+      <friendly-headers value="false" />
+      <quote-values-containing-separator value="true" />
+      <quote-all-values value="false" />
+      <value-separator value="" />
+      <begin-quote value="&quot;" />
+      <end-quote value="&quot;" />
+      <file-name value="Attribute.xls" />
+      <file-location value="C:\Users\dell\Desktop" />
+      <scope value="GLOBAL" />
+      <destination value="FILE" />
+      <format value="EXCEL" />
+      <charset value="GBK" />
+      <charset value="GBK" />
+    </export-instructions>
+  </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
@@ -24,7 +42,13 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/Xuliehua" />
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/shujuku$GtTest" />
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/Attribute" />
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/shujuku$GGG" />
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/Map" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="e46c0daa-7877-4be1-b00d-e87f360356b0" />
