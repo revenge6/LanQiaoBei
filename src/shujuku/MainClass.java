@@ -9,33 +9,55 @@ import java.sql.SQLException;
 
 
 public class MainClass {
+    static String url = "jdbc:sqlite:D:\\\\java\\\\idea-workspace\\\\LanQiaoBei\\\\test.db";
 
-    private Map<String,String> map; //系统表 map???
 
     // 第一个函数 Select,传入类名主键名主键值
     public Object Select(String clzName, String persistentStorePriKey, Object priKeyValue) {
-        // 遍历系统表 map 查找类名对应的表名
-        String tablename = map.get(clzName);
+        String tableName = DataBase.GetTableName(clzName);
 
-        if (tablename != null) {
+        if (tableName != null) {
             // 构建 SQL 查询语句
-            String sql = "SELECT * FROM " + tablename + " WHERE " + persistentStorePriKey + " = ?";
+            String sql = "SELECT * FROM \"" + tableName + "\" WHERE \"" + persistentStorePriKey + "\" = ?";
 
-            // 执行查询操作
-            Object result = executeQuery(sql, priKeyValue);
-            return result;
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection conn = DriverManager.getConnection(url);
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setObject(1, priKeyValue);
+                ResultSet rs = pstmt.executeQuery();
+
+                Object result = null;
+                if (rs.next()) {
+                    result = rs.getObject(1);
+                }
+
+                rs.close();
+                pstmt.close();
+                conn.close();
+                return result;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         } else {
-            return false; // 如果没有找到对应的类名，返回 false
+            return false;
         }
     }
-
+    public static void main(String[] args) {
+        MainClass instance = new MainClass();
+        Object result = instance.Select("shujuku.GtTest", "id", 3);
+        System.out.println(result);
+    }
+/*
     // 第二个函数 Select_obj，传入对象obj
     public Object Select_obj(Object obj) {
         // 使用反射获取对象的类名
         String clzName = obj.getClass().getName();
 
         // 从系统表 map 中获取类名对应的表名
-        String tablename = map.get(clzName);
+        String tablename = DataBase.GetTableName(clzName);
 
         if (tablename != null) {
             // 构造 SQL 查询语句，查询对象的属性值作为条件
@@ -57,7 +79,7 @@ public class MainClass {
 
         // 遍历系统表 map 获取表名
         String clzName = obj.getClass().getName();
-        String tablename = map.get(clzName);
+        String tablename = DataBase.GetTableName(clzName);
 
         if (tablename != null) {
             // 构造 SQL 查询语句，根据主键和主键值查询记录
@@ -68,9 +90,9 @@ public class MainClass {
             return null; // 如果没有找到对应的表名返回null
         }
     }
-
+*/
     //执行sql操作
-    private Object executeQuery(String sql, Object... params) {
+ /*   private Object executeQuery(String sql, Object... params) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -109,4 +131,8 @@ public class MainClass {
     private String constructSQL(Object obj, String tablename) {
         return "SELECT * FROM " + tablename + " WHERE ..."; // 构造 SQL语句
     }
+*/
+
 }
+
+

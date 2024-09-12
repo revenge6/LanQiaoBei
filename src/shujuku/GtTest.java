@@ -4,9 +4,9 @@ package shujuku;
 public class GtTest implements IPersistentStore{
     int age;
     int id;
-    int grade;
+    String grade;
     String name;
-    public GtTest(int age, int id,int grade,String name) {
+    public GtTest(int age, int id,String grade,String name) {
         this.age = age;
         this.id = id;
         this.grade=grade;
