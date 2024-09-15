@@ -219,7 +219,9 @@ public class DataBase {
                 else
                     sql = sql + fields[i][1] + " " + kind + ",";
             }
+            String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
             stmt.execute(sql);
+            stmt.execute(sql1);
             // 关闭资源
             stmt.close();
             conn.close();
