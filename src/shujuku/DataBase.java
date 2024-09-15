@@ -12,7 +12,7 @@ public class DataBase {
         InitialTable();
     }
 
-    public static boolean DeleteTable(String tableName){
+    public static boolean DeleteTable(String tableName){//系统表函数，删除系统表中对应数据表
         try{
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -61,7 +61,7 @@ public class DataBase {
 //            throw new RuntimeException(e);
 //        }
 //    }
-    public static String GetTableName(String clzName) {
+    public static String GetTableName(String clzName) {//查询系统表中是否存在数据表函数
         try {
             //加载驱动类
             Class.forName("org.sqlite.JDBC");
@@ -84,7 +84,7 @@ public class DataBase {
             throw new RuntimeException(e);
         }
     }
-    public static String GetClzName(String tableName) {
+    public static String GetClzName(String tableName) {//在系统表里面查询获得类名函数
         try {
             //加载驱动类
             Class.forName("org.sqlite.JDBC");
@@ -181,7 +181,13 @@ public class DataBase {
                 else
                     sql = sql + fields[i][1] + " " + kind + ",";
             }
+
+
+            String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
             stmt.execute(sql);
+            stmt.execute(sql1);
+
+
             // 关闭资源
             stmt.close();
             conn.close();
@@ -193,7 +199,7 @@ public class DataBase {
         //更新系统表
         return UpdateSystemTable(fields, clzName, switchTableName(clzName));
     }
-    //创建表函数
+    //创建表函数？？
     public static boolean CreateTempTable(String clzName, String[][] fields) {
         try {
             Class.forName("org.sqlite.JDBC");
