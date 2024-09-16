@@ -1,5 +1,9 @@
 package shujuku;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.sql.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,8 +15,36 @@ public class DataBase {
         this.url = url;
         InitialTable();
     }
-
-    public static boolean DeleteTable(String tableName){//系统表函数，删除系统表中对应数据表
+    //检查该对象的类是否实现Serializable接口
+    public static boolean isSerializable(Class<?> clazz) {
+        // 检查类是否实现了 Serializable 接口
+        return Serializable.class.isAssignableFrom(clazz);
+    }
+    //获取序列化字节的字符串形式，每个字节以空格分割
+    public static String serializeToString(Object obj){
+        if(obj==null || !isSerializable((obj.getClass()))){
+            return "";
+        }
+        try{
+            //将对象存储到字节序列
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos=new ObjectOutputStream(baos);
+            //写入对象
+            oos.writeObject(obj);
+            oos.flush();
+            byte[] bytes=baos.toByteArray();
+            String str="";
+            for (byte b : bytes) {
+                str+=b + " ";
+            }
+            oos.close();//关闭资源
+            return str;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //系统表函数，删除系统表中对应数据表
+    public static boolean DeleteTable(String tableName){
         try{
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
