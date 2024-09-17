@@ -1,9 +1,5 @@
 package shujuku;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.sql.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,34 +10,6 @@ public class DataBase {
     public DataBase(String url) {
         this.url = url;
         InitialTable();
-    }
-    //检查该对象的类是否实现Serializable接口
-    public static boolean isSerializable(Class<?> clazz) {
-        // 检查类是否实现了 Serializable 接口
-        return Serializable.class.isAssignableFrom(clazz);
-    }
-    //获取序列化字节的字符串形式，每个字节以空格分割
-    public static String serializeToString(Object obj){
-        if(obj==null || !isSerializable((obj.getClass()))){
-            return "";
-        }
-        try{
-            //将对象存储到字节序列
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos=new ObjectOutputStream(baos);
-            //写入对象
-            oos.writeObject(obj);
-            oos.flush();
-            byte[] bytes=baos.toByteArray();
-            String str="";
-            for (byte b : bytes) {
-                str+=b + " ";
-            }
-            oos.close();//关闭资源
-            return str;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
     //系统表函数，删除系统表中对应数据表
     public static boolean DeleteTable(String tableName){
@@ -63,7 +31,7 @@ public class DataBase {
             conn.close();
             return true;
         } catch (SQLException e) {
-            System.out.println("删除表失败，表不存在！");
+            System.out.println(e.getMessage());
             return false;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -213,13 +181,9 @@ public class DataBase {
                 else
                     sql = sql + fields[i][1] + " " + kind + ",";
             }
-
-
-            String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
+            //String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
             stmt.execute(sql);
-            stmt.execute(sql1);
-
-
+            //stmt.execute(sql1);
             // 关闭资源
             stmt.close();
             conn.close();
@@ -284,7 +248,7 @@ public class DataBase {
             String sql1 = "INSERT INTO Attribute (clzName, attitudeName, isKey, attitudeType) VALUES ";
             sql1 += "('" + clzName + "','" + fields[0][1] + "'," + "1,'" + fields[0][0] + "');";
             stmt.executeUpdate(sql1);
-            for (int i = 1; i < fields.length; i++) {
+            for (int i = 1; i < fields.length-1; i++) {
                 String sql2 = "INSERT INTO Attribute (clzName, attitudeName, isKey, attitudeType) VALUES ";
                 sql2 += "('" + clzName + "','" + fields[i][1] + "'," + "0,'" + fields[i][0] + "');";
                 stmt.executeUpdate(sql2);
@@ -315,7 +279,7 @@ public class DataBase {
                 columns.put(resultSet.getString("attitudeName"),resultSet.getString("attitudeType"));
             }
             //2.先判断是否属性数目想同，以免遍历出现数组越界
-            if (columns.size() != fields.length) {
+            if (columns.size() != fields.length-1) {
                 return false;
             }
             //3.检查属性类型是否一致
