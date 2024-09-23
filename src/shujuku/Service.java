@@ -17,7 +17,6 @@ public class Service {
         String tableName=DataBase.GetTableName(clzName);
         String[][] fields=ObjReflect.GetFields(store);
         String priKey=store.getPriKey();
-        //String priKeyValue= store.getPriKeyValue();
         //将主键列提前
         String[][] newFields=new String[fields.length][3];
         int t=1;
@@ -34,10 +33,10 @@ public class Service {
         }
         if(tableName!=""){
             if(!DataBase.CheckTabFields(tableName,newFields)){
-                //TableStructure.UpdateTable(tableName,newFields);
+                TableStructure.UpdateTable(tableName,newFields);
                 //直接重新创建表更稳妥
-                DataBase.DeleteTable(tableName);
-                DataBase.CreateTable(clzName,newFields);
+//                DataBase.DeleteTable(tableName);
+//                DataBase.CreateTable(clzName,newFields);
                 //tableName=DataBase.GetTableName(clzName);
             }
         }else {
@@ -138,7 +137,7 @@ public class Service {
            return Add(store);
         }else {
             if(!DataBase.CheckTabFields(tableName,newFields)){
-                //TableStructure.UpdateTable(tableName,newFields);
+//                TableStructure.UpdateTable(tableName,newFields);
                 //直接重新创建表更稳妥
                 DataBase.DeleteTable(tableName);
                 DataBase.CreateTable(clzName,newFields);
@@ -172,7 +171,7 @@ public class Service {
             return Add(obj,priKey);
         }else {
             if(!DataBase.CheckTabFields(tableName,newFields)){
-                //TableStructure.UpdateTable(tableName,newFields);
+//                TableStructure.UpdateTable(tableName,newFields);
                 //直接重新创建表更稳妥
                 DataBase.DeleteTable(tableName);
                 DataBase.CreateTable(clzName,newFields);

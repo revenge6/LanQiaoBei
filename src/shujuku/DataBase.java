@@ -126,11 +126,11 @@ public class DataBase {
             //创建属性表SQL语句并执行
             String sqlA = "CREATE TABLE IF NOT EXISTS Attribute (" +
                     "clzName varchar(255) not null , " +
-                    "attitudeName varchar(255)  NOT NULL, " +
+                    "attributeName varchar(255)  NOT NULL, " +
                     "isKey tinyint(1) not null DEFAULT 0," +
-                    "attitudeType varchar(100)," +
+                    "attributeType varchar(100)," +
                     "FOREIGN KEY (clzName) REFERENCES Map(clzName)," +
-                    "primary key(clzName,attitudeName)" +
+                    "primary key(clzName,attributeName)" +
                     ")";
             stmt.executeUpdate(sqlA);
             System.out.println("初始化完成");
@@ -245,11 +245,11 @@ public class DataBase {
             String sql = "INSERT INTO Map(clzName,tableName) VALUES ('" + clzName + "','" + tableName + "');";
             stmt.executeUpdate(sql);
             //更新Attribute表
-            String sql1 = "INSERT INTO Attribute (clzName, attitudeName, isKey, attitudeType) VALUES ";
+            String sql1 = "INSERT INTO Attribute (clzName, attributeName, isKey, attributeType) VALUES ";
             sql1 += "('" + clzName + "','" + fields[0][1] + "'," + "1,'" + fields[0][0] + "');";
             stmt.executeUpdate(sql1);
             for (int i = 1; i < fields.length-1; i++) {
-                String sql2 = "INSERT INTO Attribute (clzName, attitudeName, isKey, attitudeType) VALUES ";
+                String sql2 = "INSERT INTO Attribute (clzName, attributeName, isKey, attributeType) VALUES ";
                 sql2 += "('" + clzName + "','" + fields[i][1] + "'," + "0,'" + fields[i][0] + "');";
                 stmt.executeUpdate(sql2);
             }
@@ -263,7 +263,7 @@ public class DataBase {
         }
         return true;
     }
-    //检查列属性是否一致类(考虑顺序)--gt
+    //检查列属性是否一致类--gt
     public static boolean CheckTabFields(String tableName,String[][] fields) {
         try {
             //连接数据库
@@ -272,11 +272,11 @@ public class DataBase {
             Statement stmt = conn.createStatement();
             String clzName=GetClzName(tableName);
             //1.获取类对应的类表的列头
-            ResultSet resultSet = stmt.executeQuery("select attitudeName,attitudeType from Attribute where clzName='"+clzName+"'");
+            ResultSet resultSet = stmt.executeQuery("select attributeName,attributeType from Attribute where clzName='"+clzName+"'");
             Map<String,String> columns=new LinkedHashMap<>();
             //遍历结果集并将列头和列数据类型保存到数组中
             while (resultSet.next()) {
-                columns.put(resultSet.getString("attitudeName"),resultSet.getString("attitudeType"));
+                columns.put(resultSet.getString("attributeName"),resultSet.getString("attributeType"));
             }
             //2.先判断是否属性数目想同，以免遍历出现数组越界
             if (columns.size() != fields.length-1) {
@@ -302,16 +302,14 @@ public class DataBase {
 
     //系统表更新系列函数--蒋梦圆
     //1 增加一列的系统表更新  这一列不能是主键
-    public static boolean Add_columns(String clzName,String[][] newCols,String fields[][]){
+    public static boolean Alter_column(String clzName,String fieldName,String fieldType){
 //insert into 表名 values(值1,值2,...值n);
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();//数据库连接
-            for(int i=0;i<fields.length;i++) {
-                String sql="insert into Attribute values('"+clzName+"','"+newCols[i][1]+"','"+"0"+"','"+newCols[i][0]+"');";
-                stmt.executeUpdate(sql);
-            }
+            String sql="insert into Attribute values('"+clzName+"','"+fieldName+"','"+"0"+"','"+fieldType+"');";
+            stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
         } catch (ClassNotFoundException e) {
@@ -328,7 +326,7 @@ public class DataBase {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();//数据库连接
-            String sql="delete from Attribute where clzName='"+clzName+"' and attitudeName='"+column +"';";
+            String sql="delete from Attribute where clzName='"+clzName+"' and attributeName='"+column +"';";
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
@@ -345,7 +343,7 @@ public class DataBase {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();//数据库连接
-            String sql="update Attribute set attitudeType= '"+newType+"' where clzName='"+clzName+"' and attitudeName='"+field +"';";
+            String sql="update Attribute set attributeType= '"+newType+"' where clzName='"+clzName+"' and attributeName='"+field +"';";
             stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
@@ -378,8 +376,8 @@ public class DataBase {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();//数据库连接
-            String sqlAK1="update "+tableName+" set isKey= '0' where clzName = '"+clzName+"' and attitudeName = '"+pastKey+"';";
-            String sqlAK2="update "+tableName+" set isKey= '1' where clzName = '"+clzName+"' and attitudeName = '"+newKey+"';";
+            String sqlAK1="update "+tableName+" set isKey= '0' where clzName = '"+clzName+"' and attributeName = '"+pastKey+"';";
+            String sqlAK2="update "+tableName+" set isKey= '1' where clzName = '"+clzName+"' and attributeName = '"+newKey+"';";
             stmt.executeUpdate(sqlAK1);
             stmt.executeUpdate(sqlAK2);
             stmt.close();

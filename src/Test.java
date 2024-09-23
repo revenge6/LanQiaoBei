@@ -8,14 +8,11 @@ public class Test {
         Service service=new Service("jdbc:sqlite:D:\\java\\idea-workspace\\LanQiaoBei\\test.db");
         GtTest one = new GtTest(1,1,"99","gt");
         GtTest two = new GtTest(1,2,"90","hf");
-        GGG three=new GGG(3,1,111,"kk");
-//        service.Add(one);
-//        service.Add(two);
+//        GtTest three = new GtTest(1,3,"hf");
+        service.Add(one);
+        service.Add(two);
+//        service.Add(three);
 //        service.Add(three,"id");
-//        GtTest ones = new GtTest(2,1,"9","ggt");
-//        service.Update(ones);
-        GGG threes=new GGG(11,1,11,"ikun");
-        service.Update(threes,"id");
 //        service.Delete(one);
 //        service.Delete(ObjReflect.GetClzName(three),"id","1");
     }

@@ -15,6 +15,14 @@ public class GtTest implements IPersistentStore, Serializable {
         this.name=name;
     }
 
+//    int age;
+//    int id;
+//    String name;
+//    public GtTest(int age, int id,String name) {
+//        this.age = age;
+//        this.id = id;
+//        this.name=name;
+//    }
     @Override
     public String getPriKey() {
         return "id";

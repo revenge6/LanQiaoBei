@@ -35,7 +35,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="e46c0daa-7877-4be1-b00d-e87f360356b0">
-      <console name="Connection" type="STANDARD" schema="test" session="Main"><![CDATA[delete from shujuku$GtTest where id = 1;]]></console>
+      <console name="Connection" type="STANDARD" schema="test" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -43,10 +43,8 @@
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
+      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="consoles/Connection" />
       <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/shujuku$GtTest" />
-      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/Map" />
-      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/shujuku$GGG" />
-      <object connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" object-ref="schemas/test/tables/Attribute" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
