@@ -118,7 +118,7 @@ public class Service {
         String tableName=DataBase.GetTableName(clzName);
         String[][] fields=ObjReflect.GetFields(store);
         String priKey=store.getPriKey();
-        String priKeyValue= store.getPriKeyValue();
+        //String priKeyValue= store.getPriKeyValue();
         //将主键列提前
         String[][] newFields=new String[fields.length][3];
         int t=1;

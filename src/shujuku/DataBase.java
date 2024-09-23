@@ -300,7 +300,7 @@ public class DataBase {
         return false;
     }
 
-    //系统表更新系列函数  蒋梦圆
+    //系统表更新系列函数--蒋梦圆
     //1 增加一列的系统表更新  这一列不能是主键
     public static boolean Add_columns(String clzName,String[][] newCols,String fields[][]){
 //insert into 表名 values(值1,值2,...值n);
