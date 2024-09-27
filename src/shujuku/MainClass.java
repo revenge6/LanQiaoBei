@@ -14,14 +14,12 @@ import java.util.List;
 public class MainClass {
     static String url = "jdbc:sqlite:D:\\java\\idea-workspace\\LanQiaoBei\\test.db";
 
-    public Object Select(String clzName, String persistentStorePriKey, Object priKeyValue) {
+    public static Object Select(String clzName, String persistentStorePriKey, Object priKeyValue) {
         // 根据类名获取对应的数据库表名
         String tableName = DataBase.GetTableName(clzName);
-
         if (tableName != null) {
             // 构造 SQL 查询语句
             String sql = "SELECT * FROM \"" + tableName + "\" WHERE \"" + persistentStorePriKey + "\" = ?";
-
             try {
                 // 加载 SQLite JDBC 驱动
                 Class.forName("org.sqlite.JDBC");
@@ -59,11 +57,8 @@ public class MainClass {
             return null; // 如果表名为空，则返回 null
         }
     }
-
-
-
     // 第二个函数 Select_obj，传入对象obj
-    public Object Select_obj(Object obj) {
+    public static Object Select_obj(Object obj) {
         // 使用反射获取对象的类名
         String clzName = ObjReflect.GetClzName(obj);
 
@@ -123,9 +118,8 @@ public class MainClass {
             return null; // 返回 null 表示找不到表名
         }
     }
-
     // 第三个函数 Select_jk，传入一个实现IPersistentStore接口的对象Object
-    public Object Select_jk(IPersistentStore obj) {
+    public static Object Select_jk(IPersistentStore obj) {
         // 使用接口方法获取对象的主键和主键值
         String primaryKey = obj.getPriKey(); // 获取主键字段名
         Object primaryKeyValue = obj.getPriKeyValue(); // 获取主键值
@@ -176,9 +170,8 @@ public class MainClass {
             return null; // 如果没有找到对应的表名返回 null
         }
     }
-
     // 从字符串表示形式反序列化为对象的方法
-    private Object DeserializeFromString(String byteStream) {
+    private static Object DeserializeFromString(String byteStream) {
         if (byteStream == null || byteStream.isEmpty()) {
             return null; // 如果字节流为空，返回 null
         }
@@ -202,15 +195,20 @@ public class MainClass {
     }
 
     public static void main(String[] args) {
-//        MainClass instance = new MainClass();
-//        GtTest one = new GtTest(1,1,"99","gt");
-//        Object result = instance.Select_jk(one);
-//        // 输出结果
-//        if (result != null) {
-//            System.out.println("查询成功，结果为：" + result);
-//        } else {
-//            System.out.println("未找到对应的记录。");
-//        }
+        MainClass instance = new MainClass();
+        GtTest one = new GtTest(1,1,"99","gt");
+        Object result = instance.Select(ObjReflect.GetClzName(one), one.getPriKey(), one.getPriKeyValue());
+        Object result1 = instance.Select_jk(one);
+        Object result2 = instance.Select_obj(one);
+        // 输出结果
+        if (result != null) {
+//            System.out.println("查询成功，结果为：" + one);
+            System.out.println("查询成功，结果为：" + result.toString());
+            System.out.println("查询成功，结果为：" + result1.toString());
+            System.out.println("查询成功，结果为：" + result2.toString());
+        } else {
+            System.out.println("未找到对应的记录。");
+        }
     }
 }
 //执行sql操作

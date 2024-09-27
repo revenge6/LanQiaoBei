@@ -111,7 +111,6 @@ public class Service {
         }
         return TableRecord.Delete(tableName,priKey,priKeyValue);
     }
-
     public boolean Update(IPersistentStore store){
         String clzName=ObjReflect.GetClzName(store);
         String tableName=DataBase.GetTableName(clzName);
