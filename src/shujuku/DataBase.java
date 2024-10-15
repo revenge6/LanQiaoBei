@@ -376,8 +376,8 @@ public class DataBase {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();//数据库连接
-            String sqlAK1="update "+tableName+" set isKey= '0' where clzName = '"+clzName+"' and attributeName = '"+pastKey+"';";
-            String sqlAK2="update "+tableName+" set isKey= '1' where clzName = '"+clzName+"' and attributeName = '"+newKey+"';";
+            String sqlAK1="update Attribute set isKey= '0' where clzName = '"+clzName+"' and attributeName = '"+pastKey+"';";
+            String sqlAK2="update Attribute set isKey= '1' where clzName = '"+clzName+"' and attributeName = '"+newKey+"';";
             stmt.executeUpdate(sqlAK1);
             stmt.executeUpdate(sqlAK2);
             stmt.close();
@@ -442,7 +442,7 @@ public class DataBase {
 
     public static void main(String[] args) {
         // 测试
-        String clzname = "shujuku.GtTest"; // clzname
+        String clzname = "Examples.GtTest"; // clzname
         String[][] newCols = {
                 {"INT", "new_column1"}, // 添加一个名为new_column1，类型为INT的列
         };

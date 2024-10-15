@@ -182,7 +182,11 @@ public class Service {
     }
     //改主键
     public boolean AlterKey(String clzName,String pastKey,String newKey){
+        if(pastKey.equals(newKey)){//重复则直接返回
+            return true;
+        }
         String tableName=DataBase.GetTableName(clzName);
+        TableStructure.AlterKey(clzName,tableName,newKey);
         DataBase.AlterKey(clzName,tableName,pastKey,newKey);
         return true;
     }

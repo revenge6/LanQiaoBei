@@ -1,3 +1,5 @@
+import Examples.GGG;
+import Examples.GtTest;
 import shujuku.*;
 
 
@@ -7,18 +9,11 @@ public class Test {
     public static void main(String[] args) {
         Service service=new Service("jdbc:sqlite:D:\\java\\idea-workspace\\LanQiaoBei\\test.db");
         GtTest one = new GtTest(1,1,"99","gt");
-        GtTest two = new GtTest(1,2,"90","hf");
-//        GtTest three = new GtTest(1,3,"hf");
-        service.Add(one);
-        service.Add(two);
-//        service.Add(three);
-//        GtTest four =new GtTest(6,4,"100","jmy");
-//        service.Add(four);
-//        GtTest five =new GtTest(7,5,99,"ymj");/**/
-//        service.Add(five);
-//        service.Add(three,"id");
-//        service.Delete(one);
-//        service.Delete(ObjReflect.GetClzName(three),"id","1");
+        GGG two = new GGG(1,2,90,"hf");
+//        service.Add(one);
+//        service.Add(two,"id");
+        service.AlterKey(ObjReflect.GetClzName(new GtTest(1,1,"1","name")),"id","age");
+        service.AlterKey(ObjReflect.GetClzName(new GGG(1,1,1,"name")),"id","age");
     }
     public static void m(){
         DataBase.DeleteTable("shujuku$GGG");

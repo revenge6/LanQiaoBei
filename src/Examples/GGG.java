@@ -1,4 +1,4 @@
-package shujuku;
+package Examples;
 
 import java.io.Serializable;
 

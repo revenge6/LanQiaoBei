@@ -1,4 +1,6 @@
-package shujuku;
+package Examples;
+
+import shujuku.IPersistentStore;
 
 import java.io.Serializable;
 
