@@ -444,7 +444,7 @@ public class DataBase {
         // 测试
         String clzname = "Examples.GtTest"; // clzname
         String[][] newCols = {
-                {"INT", "new_column1"}, // 添加一个名为new_column1，类型为INT的列
+                {"INT", "new_column2"}, // 添加一个名为new_column1，类型为INT的列
         };
 
         boolean result = Add_columns(clzname, newCols);
