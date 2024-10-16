@@ -22,8 +22,13 @@ public class ObjReflect {
     }
     //获取序列化字节的字符串形式，每个字节以空格分割
     public static String SerializeToString(Object obj){
-        if(obj==null || !isSerializable((obj.getClass()))){
+        if(obj==null){
             return "";
+        }
+        //检测未实现序列化的对象后异常退出操作
+        if(!isSerializable((obj.getClass() ))){
+            System.out.println(ObjReflect.GetClzName(obj)+"未实现序列化接口！");
+            System.exit(-1);
         }
         try{
             //将对象存储到字节序列

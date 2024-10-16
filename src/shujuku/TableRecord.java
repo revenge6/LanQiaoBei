@@ -11,7 +11,6 @@ public class TableRecord {
         url=dataBase.url;
         this.dataBase=dataBase;
     }
-
     //插入记录函数——wym
     public static boolean insert(String tableName, String[][] fields) {
         try {
@@ -49,7 +48,6 @@ public class TableRecord {
             return false;
         }
     }
-
     //删除一个对象——lab
     public static boolean Delete(String tableName,String priKey,String priKeyValue) {
         try {
@@ -94,34 +92,6 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
-//    public void Delete(Class<?> clz, String persistentStorePriKey, String priKeyValue) {
-//        try {
-//            Class.forName("org.sqlite.JDBC");
-//            Connection conn = DriverManager.getConnection(url);
-//            Statement stmt = conn.createStatement();
-//
-//            // 获取tableName
-//            String str = "select tableName from Map where clzName='" + clz.getName() + "';";
-//            ResultSet rs = stmt.executeQuery(str);
-//            String tableName = "";
-//            if (rs.next()) {
-//                tableName = rs.getString("tableName");
-//            }
-//
-//            // 构建删除SQL语句
-//            String sql = "delete from " + tableName + " where " + persistentStorePriKey + "='" + priKeyValue + "'";
-//            stmt.executeUpdate(sql);
-//
-//            stmt.close();
-//            conn.close();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-    //更新函数——wym
     public static boolean Update(String tableName,String[][] fields) {
         try{
             Class.forName("org.sqlite.JDBC");
@@ -146,51 +116,6 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
-    
-//    public void Update(Object obj, String persistentStorePriKey, String priKeyValue) {
-//        try{
-//            Class.forName("org.sqlite.JDBC");
-//            Connection conn = DriverManager.getConnection(url);
-//            // 创建Statement对象来执行SQL语句
-//            Statement stmt=conn.createStatement();
-//
-//            ObjReflect objReflect = new ObjReflect();
-//            //获取对象类名
-//            String clzName=objReflect.GetClzName(obj);
-//            //获取对象属性数组
-//            String[][] fields=objReflect.GetFields(obj);
-//            //在Map表中找到tableName
-//            String str="select tableName from Map where clzName= '"+clzName+"';";
-//            ResultSet rs=stmt.executeQuery(str);
-//            String tableName="";
-//            if (rs.next())
-//                tableName=rs.getString("tableName");
-//
-//            String sql="select "+persistentStorePriKey+" from "+tableName+" where persistentStorePriKey='"+priKeyValue+"';";
-//            ResultSet rs1=stmt.executeQuery(str);
-//            //根据结果集结果判断是否类表中有这一行元素
-//            if (rs1.next()){
-//                String upd = "update " + clzName + "set ";
-//                for(int i=0;i<fields[0].length;i++){
-//                    upd+=fields[i][1]+"="+fields[i][2];
-//                    if(i!=fields[0].length)
-//                        upd+=",";
-//                }
-//                upd+=" where persistentStorePriKey='" + priKeyValue +"';";
-//                stmt.executeUpdate(upd);
-//            }{
-//                //如果没有则执行插入
-//                insert(clzName,fields);
-//            }
-//            stmt.close();
-//            conn.close();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
 }
 
 

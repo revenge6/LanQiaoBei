@@ -16,7 +16,7 @@ public class TableStructure {
         url = DataBase.url;
         this.dataBase = dataBase;
     }
-
+    //更新表
     public static void UpdateTable(String tableName, String[][] fields) {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -25,19 +25,20 @@ public class TableStructure {
             Statement stmt = conn.createStatement();
             String clzName = DataBase.GetClzName(tableName);
             //1.获取类对应的类表的列头
-            ResultSet resultSet = stmt.executeQuery("select attitudeName,attitudeType from Attribute where clzName='" + clzName + "';");
+            ResultSet resultSet = stmt.executeQuery("select attributeName,attributeType from Attribute where clzName='" + clzName + "';");
             Map<String, String> columns = new LinkedHashMap<>();
             // 遍历结果集并将列头和列数据类型保存到数组中
             while (resultSet.next()) {
-                columns.put(resultSet.getString("attitudeName"), resultSet.getString("attitudeType"));
+                columns.put(resultSet.getString("attributeName"), resultSet.getString("attributeType"));
             }
             stmt.close();
             conn.close();
             //2.遍历fields
-            for (int i = 0; i < fields.length; i++) {
+            for (int i = 0; i < fields.length-1; i++) {
                 if (columns.get(fields[i][1]) == null) {
                     //插入列，新列名为 fields[i][1]
                     AlterList(tableName, fields[i][1], fields[i][0]);
+                    DataBase.Alter_column(clzName, fields[i][1],fields[i][0]);
                 } else if (!columns.get(fields[i][1]).equals(fields[i][0])) {
                     columns.remove(fields[i][1]);
                     //更新列，列属性更改为fields[i][0]
@@ -62,7 +63,6 @@ public class TableStructure {
             throw new RuntimeException(e);
         }
     }
-
     //插入列
     private static boolean AlterList(String tableName, String newList, String newListType) {
         try {
@@ -70,8 +70,8 @@ public class TableStructure {
             Connection conn = DriverManager.getConnection(url);
             // 创建Statement对象来执行SQL语句
             Statement stmt = conn.createStatement();
-
-            String sql = "alter table " + tableName + " add column " + newList + " " + newListType;
+            String kind = kindSwitch.get(newListType)!=null?kindSwitch.get(newListType):"NONE";
+            String sql = "alter table " + tableName + " add column " + newList + " " + kind+";";
             int count = stmt.executeUpdate(sql);
             stmt.close();
             conn.close();
@@ -93,28 +93,48 @@ public class TableStructure {
 
             String clzName = DataBase.GetClzName(tableName);
             // 获取类对应的类表的列头
-            ResultSet resultSet = stmt.executeQuery("select attitudeName,attitudeType from Attribute where clzName='" + clzName + "';");
+            ResultSet resultSet = stmt.executeQuery("select attributeName,attributeType from Attribute where clzName='" + clzName + "';");
             Map<String, String> columns = new LinkedHashMap<>();
             while (resultSet.next()) {
-                columns.put(resultSet.getString("attitudeName"), resultSet.getString("attitudeType"));
+                columns.put(resultSet.getString("attributeName"), resultSet.getString("attributeType"));
             }
+            //获取主键列属性名
+            ResultSet rs=stmt.executeQuery("select attributeName from Attribute where clzName='" + clzName + "' and isKey=1;");
+            String priKey=rs.getString("attributeName");
+            //更换数据类型
             columns.put(field,newFieldType);
             String[] keys=columns.keySet().toArray(new String[0]);
-            //删除旧表
-            String sqlD="drop table "+tableName+";";
-            stmt.execute(sqlD);
-            //创建新表
-            String sql = "create table if not exists " + tableName + " (";
+            //1.创建新表
+            String newTableName=tableName+"Temp";
+            String sqlC = "create table if not exists " + newTableName;
+            String fieldsSql=" (";
             for (int i = 0; i < keys.length; i++) {
                 String kind=kindSwitch.get(columns.get(keys[i]))!=null?kindSwitch.get(columns.get(keys[i])):"NONE";
-                if (i == 0)
-                    sql = sql + keys[i] + " " + kind + " primary key,";
-                else if (i == keys.length - 1)
-                    sql = sql + keys[i] + " " + kind + ");";
+                if (priKey.equals(keys[i]))
+                    fieldsSql = fieldsSql + keys[i] + " " + kind + " primary key,";
                 else
-                    sql = sql + keys[i] + " " + kind + ",";
+                    fieldsSql = fieldsSql + keys[i] + " " + kind + ",";
             }
-            stmt.execute(sql);
+            String xuliehuaKind=kindSwitch.get(columns.get(ObjReflect.GetClzName("")))!=null?kindSwitch.get(columns.get(ObjReflect.GetClzName(""))):"NONE";
+            fieldsSql=fieldsSql+ObjReflect.xuliehua+" "+xuliehuaKind+")";
+            sqlC=sqlC+fieldsSql+";";
+            stmt.execute(sqlC);
+            //2.插入新表
+            String sqlI="Insert into "+newTableName+" (";
+            String fieldsSql2="";
+            for(int i=0;i< keys.length;i++){
+                fieldsSql2=fieldsSql2+keys[i]+",";
+            }
+            fieldsSql2=fieldsSql2+ObjReflect.xuliehua;
+            sqlI=sqlI+fieldsSql2+")"+" select "+fieldsSql2+" from "+tableName;
+            stmt.execute(sqlI);
+            //3.删除旧表
+            String sqlD="drop table "+tableName+";";
+            stmt.execute(sqlD);
+            //4.将新表重命名为旧表
+            String sqlA="Alter table "+newTableName+" rename to "+tableName+";";
+            stmt.execute(sqlA);
+
             return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -122,27 +142,6 @@ public class TableStructure {
             throw new RuntimeException(e);
         }
     }
-
-    //    //删除列
-//    private static boolean DeleteList(String tableName, String list){
-//        try {
-//            Class.forName("org.sqlite.JDBC");
-//            Connection conn = DriverManager.getConnection(url);
-//            // 创建Statement对象来执行SQL语句
-//            Statement stmt=conn.createStatement();
-//            String sql="alter table "+tableName+" drop column "+list+";";
-//            int count=stmt.executeUpdate(sql);
-//            stmt.close();
-//            conn.close();
-//            if(count==0)
-//                return false;
-//            return true;
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
     //删除列
     private static boolean DeleteList(String tableName, String list) {
         try {
@@ -153,28 +152,26 @@ public class TableStructure {
 
             String clzName = DataBase.GetClzName(tableName);
             // 获取类对应的类表的列头
-            ResultSet resultSet = stmt.executeQuery("select attitudeName,attitudeType from Attribute where clzName='" + clzName + "';");
+            ResultSet resultSet = stmt.executeQuery("select attributeName,attributeType from Attribute where clzName='" + clzName + "';");
             Map<String, String> columns = new LinkedHashMap<>();
             while (resultSet.next()) {
-                columns.put(resultSet.getString("attitudeName"), resultSet.getString("attitudeType"));
+                columns.put(resultSet.getString("attributeName"), resultSet.getString("attributeType"));
             }
             columns.remove(list);
             String temp = tableName + "Temp";
-            //构造创建表语句
+            //1.构造创建表语句
             String sql = "create table " + temp + " as select ";
             String[] keys = columns.keySet().toArray(new String[0]);
             for (int i = 0; i < keys.length; i++) {
-                sql += keys[i];
-                if (i != keys.length - 1) {
-                    sql += ",";
-                }
+                sql=sql+keys[i]+",";
             }
+            sql=sql+ObjReflect.xuliehua;
             sql += " from " + tableName + ";";
             stmt.execute(sql);
-            //删除旧表
+            //2.删除旧表
             String sqlD = "drop table " + tableName + ";";
             stmt.execute(sqlD);
-            //将新表名修改为类名
+            //3.将新表名修改为类名
             String sqlR = "alter table " + temp + " rename to " + tableName+";";
             stmt.execute(sqlR);
             stmt.close();
@@ -188,59 +185,59 @@ public class TableStructure {
     }
 
     //改主键-2
-    public static boolean AlterKey(String pastKey, String newKey, String clzName) {
+    public static boolean AlterKey(String clzName,String tableName, String newKey) {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();
 
             // 获取列头信息
-            ResultSet resultSet = stmt.executeQuery("select attitudeName, attitudeType from Attribute where clzName='" + clzName + "';");
+            ResultSet resultSet = stmt.executeQuery("select attributeName, attributeType from Attribute where clzName='" + clzName + "';");
             Map<String, String> columns = new LinkedHashMap<>();
             while (resultSet.next()) {
-                columns.put(resultSet.getString("attitudeName"), resultSet.getString("attitudeType"));
+                columns.put(resultSet.getString("attributeName"), resultSet.getString("attributeType"));
             }
-
             // 检查新主键是否在列中
             if (!columns.containsKey(newKey)) {
                 throw new RuntimeException("The new key is not a valid column in the table.");
             }
-
             // 创建临时表的 SQL 语句
-            String tempTableName = clzName + "Temp";
+            String tempTableName = tableName + "Temp";
             StringBuilder createTempTable = new StringBuilder("CREATE TABLE " + tempTableName + " (");
 
             String[] keys = columns.keySet().toArray(new String[0]);
             for (int i = 0; i < keys.length; i++) {
                 String type = kindSwitch.get(columns.get(keys[i]));
                 if (keys[i].equals(newKey)) {
-                    createTempTable.append(keys[i]).append(" ").append(type).append(" PRIMARY KEY");
+                    createTempTable.append(keys[i]).append(" ").append(type).append(" PRIMARY KEY,");
                 } else {
-                    createTempTable.append(keys[i]).append(" ").append(type);
-                }
-                if (i != keys.length - 1) {
-                    createTempTable.append(", ");
+                    createTempTable.append(keys[i]).append(" ").append(type+",");
                 }
             }
+            String xuliehuaKind=kindSwitch.get(columns.get(ObjReflect.GetClzName("")))!=null?kindSwitch.get(columns.get(ObjReflect.GetClzName(""))):"NONE";
+            createTempTable.append(ObjReflect.xuliehua).append(" ").append(xuliehuaKind);
             createTempTable.append(");");
-            System.out.println("Create Table SQL: " + createTempTable);  // 打印 SQL 语句用于调试
-            stmt.executeUpdate("drop table if exists XuliehuaTemp;");
+            //System.out.println("Create Table SQL: " + createTempTable);  // 打印 SQL 语句用于调试
             // 执行创建表的 SQL
             stmt.execute(createTempTable.toString());
-
-            // 将旧表中的数据插入到新表中
-            String insertData = "INSERT INTO " + tempTableName + " SELECT * FROM " + clzName + ";";
-            System.out.println("Insert Data SQL: " + insertData);  // 打印 SQL 语句用于调试
-            stmt.execute(insertData);
+            //插入新表
+            String sqlI="Insert into "+tempTableName+" (";
+            String fieldsSql2="";
+            for(int i=0;i< keys.length;i++){
+                fieldsSql2=fieldsSql2+keys[i]+",";
+            }
+            fieldsSql2=fieldsSql2+ObjReflect.xuliehua;
+            sqlI=sqlI+fieldsSql2+")"+" select "+fieldsSql2+" from "+tableName;
+            stmt.execute(sqlI);
 
             // 删除旧表
-            String dropOldTable = "DROP TABLE IF EXISTS " + clzName + ";";
-            System.out.println("Drop Table SQL: " + dropOldTable);  // 打印 SQL 语句用于调试
+            String dropOldTable = "DROP TABLE IF EXISTS " + tableName + ";";
+            //System.out.println("Drop Table SQL: " + dropOldTable);  // 打印 SQL 语句用于调试
             stmt.execute(dropOldTable);
 
             // 将临时表重命名为原表名
-            String renameTable = "ALTER TABLE " + tempTableName + " RENAME TO " + clzName + ";";
-            System.out.println("Rename Table SQL: " + renameTable);  // 打印 SQL 语句用于调试
+            String renameTable = "ALTER TABLE " + tempTableName + " RENAME TO " + tableName + ";";
+            //System.out.println("Rename Table SQL: " + renameTable);  // 打印 SQL 语句用于调试
             stmt.execute(renameTable);
 
             stmt.close();
