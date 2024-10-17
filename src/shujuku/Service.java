@@ -1,18 +1,4 @@
 package shujuku;
-import Examples.GtTest;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static shujuku.TableStructure.url;
 
 public class Service {
 
@@ -57,7 +43,7 @@ public class Service {
             DataBase.CreateTable(clzName,newFields);
             tableName=DataBase.GetTableName(clzName);
         }
-        return TableRecord.insert(tableName,newFields);
+        return TableRecord.Insert(tableName,newFields);
     }
     public boolean Add(Object obj,String priKey){
         String clzName=ObjReflect.GetClzName(obj);
@@ -90,7 +76,7 @@ public class Service {
             DataBase.CreateTable(clzName,newFields);
             tableName=DataBase.GetTableName(clzName);
         }
-        return TableRecord.insert(tableName,newFields);
+        return TableRecord.Insert(tableName,newFields);
     }
     public boolean Delete(IPersistentStore store){
         String clzName=ObjReflect.GetClzName(store);
@@ -155,7 +141,7 @@ public class Service {
                 DataBase.DeleteTable(tableName);
                 DataBase.CreateTable(clzName,newFields);
                 tableName=DataBase.GetTableName(clzName);
-                return TableRecord.insert(tableName,newFields);
+                return TableRecord.Insert(tableName,newFields);
             }
         }
         return TableRecord.Update(tableName,newFields);
@@ -189,7 +175,7 @@ public class Service {
                 DataBase.DeleteTable(tableName);
                 DataBase.CreateTable(clzName,newFields);
                 tableName=DataBase.GetTableName(clzName);
-                return TableRecord.insert(tableName,newFields);
+                return TableRecord.Insert(tableName,newFields);
             }
         }
         return TableRecord.Update(tableName,newFields);
@@ -205,109 +191,35 @@ public class Service {
         return true;
     }
 
-    public static Object Select(String clzName, String persistentStorePriKey, Object priKeyValue) {
+    public Object Select(String clzName, String persistentStorePriKey, String priKeyValue) {
         String tableName = DataBase.GetTableName(clzName);
-        if (tableName != null) {
-            String sql = "SELECT * FROM \"" + tableName + "\" WHERE \"" + persistentStorePriKey + "\" = ?";
-            try (Connection conn = DriverManager.getConnection(url);
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-                pstmt.setObject(1, priKeyValue);
-                ResultSet rs = pstmt.executeQuery();
-
-                Object result = null;
-                while (rs.next()) {
-                    String byteStream = rs.getString(ObjReflect.xuliehua);
-                    result = DeserializeFromString(byteStream);
-                }
-                return result;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return null;
-    }
-
-    public static Object Select_obj(Object obj) {
-        String clzName = ObjReflect.GetClzName(obj);
-        String tableName = DataBase.GetTableName(clzName);
-        if (tableName != null) {
-            String[][] fields = ObjReflect.GetFields(obj);
-            StringBuilder sql = new StringBuilder("SELECT * FROM \"" + tableName + "\" WHERE ");
-            List<Object> values = new ArrayList<>();
-
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i][2] != null) {
-                    sql.append("\"").append(fields[i][1]).append("\" = ? AND ");
-                    values.add(fields[i][2]);
-                }
-            }
-
-            if (sql.length() > 5) {
-                sql.setLength(sql.length() - 5);
-            }
-
-            List<Object> results = new ArrayList<>();
-            try (Connection conn = DriverManager.getConnection(url);
-                 PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-
-                for (int i = 0; i < values.size(); i++) {
-                    pstmt.setObject(i + 1, values.get(i));
-                }
-
-                ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    String byteStream = rs.getString(ObjReflect.xuliehua);
-                    results.add(DeserializeFromString(byteStream));
-                }
-                return results.isEmpty() ? null : results;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return null;
-    }
-
-    public static Object Select_jk(IPersistentStore obj) {
-        String primaryKey = obj.getPriKey();
-        Object primaryKeyValue = obj.getPriKeyValue();
-        String clzName = ObjReflect.GetClzName(obj);
-        String tableName = DataBase.GetTableName(clzName);
-
-        if (tableName != null) {
-            String sql = "SELECT * FROM \"" + tableName + "\" WHERE \"" + primaryKey + "\" = ?";
-            try (Connection conn = DriverManager.getConnection(url);
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-                pstmt.setObject(1, primaryKeyValue);
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    String byteStream = rs.getString(ObjReflect.xuliehua);
-                    return DeserializeFromString(byteStream);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException("SQL Exception occurred", e);
-            }
-        }
-        return null;
-    }
-
-    private static Object DeserializeFromString(String byteStream) {
-        if (byteStream == null || byteStream.isEmpty()) {
+        if (tableName !="") {
+            return TableRecord.Search(tableName,persistentStorePriKey,priKeyValue);
+        }else {
             return null;
         }
-        try {
-            String[] byteStrings = byteStream.trim().split(" ");
-            byte[] bytes = new byte[byteStrings.length];
-            for (int i = 0; i < byteStrings.length; i++) {
-                bytes[i] = Byte.parseByte(byteStrings[i]);
-            }
-            try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-                 ObjectInputStream ois = new ObjectInputStream(bais)) {
-                return ois.readObject();
-            }
-        } catch (ClassNotFoundException | IOException e) {
-            throw new RuntimeException(e);
+    }
+
+    public Object Select_obj(Object obj) {
+        String clzName = ObjReflect.GetClzName(obj);
+        String[][] fields=ObjReflect.GetFields(obj);
+        String tableName = DataBase.GetTableName(clzName);
+        if (tableName !="") {
+            return TableRecord.Search(tableName,fields);
+        }else {
+            return null;
+        }
+    }
+
+    public Object Select_jk(IPersistentStore obj) {
+        String clzName = ObjReflect.GetClzName(obj);
+        String tableName = DataBase.GetTableName(clzName);
+        String persistentStorePriKey= obj.getPriKey();
+        String priKeyValue= obj.getPriKeyValue();
+        if (tableName !="") {
+            return TableRecord.Search(tableName,persistentStorePriKey,priKeyValue);
+        }else {
+            return null;
         }
     }
 

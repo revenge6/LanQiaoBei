@@ -196,22 +196,22 @@ public class MainClass {
             }
         }
     */
-    public static void main(String[] args) {
-        Service service = new Service("jdbc:sqlite:D:\\java\\idea-workspace\\LanQiaoBei\\test.db");
-        GtTest one = new GtTest(1, 1, "99", "gt");
-
-        Object result = service.Select(ObjReflect.GetClzName(one), one.getPriKey(), one.getPriKeyValue());
-        Object result1 = service.Select_jk(one);
-        Object result2 = service.Select_obj(one);
-
-        if (result != null) {
-            System.out.println("查询成功，结果为：" + result.toString());
-            System.out.println("查询成功，结果为：" + result1.toString());
-            System.out.println("查询成功，结果为：" + result2.toString());
-        } else {
-            System.out.println("未找到对应的记录。");
-        }
-    }
+//    public static void main(String[] args) {
+//        Service service = new Service("jdbc:sqlite:D:\\java\\idea-workspace\\LanQiaoBei\\test.db");
+//        GtTest one = new GtTest(1, 1, "99", "gt");
+//
+//        Object result = service.Select(ObjReflect.GetClzName(one), one.getPriKey(), one.getPriKeyValue());
+//        Object result1 = service.Select_jk(one);
+//        Object result2 = service.Select_obj(one);
+//
+//        if (result != null) {
+//            System.out.println("查询成功，结果为：" + result.toString());
+//            System.out.println("查询成功，结果为：" + result1.toString());
+//            System.out.println("查询成功，结果为：" + result2.toString());
+//        } else {
+//            System.out.println("未找到对应的记录。");
+//        }
+//    }
 }
 
 //执行sql操作

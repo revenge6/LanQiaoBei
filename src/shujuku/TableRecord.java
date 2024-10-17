@@ -12,7 +12,7 @@ public class TableRecord {
         this.dataBase=dataBase;
     }
     //插入记录函数——wym
-    public static boolean insert(String tableName, String[][] fields) {
+    public static boolean Insert(String tableName, String[][] fields) {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -116,6 +116,60 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
+
+    public static Object Search(String tableName, String persistentStorePriKey, String priKeyValue){
+        try{
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            // 创建Statement对象来执行SQL语句
+            Statement stmt=conn.createStatement();
+            String sqlS="select "+ ObjReflect.xuliehua +
+                    " from "+tableName +
+                    " where "+persistentStorePriKey + " = '"+priKeyValue+"';";
+            ResultSet rs = stmt.executeQuery(sqlS);
+            String byteStream="";
+            if (rs.next()) {
+                byteStream = rs.getString(ObjReflect.xuliehua);
+            }
+            stmt.close();
+            conn.close();
+            return ObjReflect.DeserializeFromString(byteStream);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Object Search(String tableName,String[][] fields){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            // 创建Statement对象来执行SQL语句
+            Statement stmt=conn.createStatement();
+            // 构造插入表SQL语句
+            String sqlS="select "+ ObjReflect.xuliehua +
+                    " from "+tableName +
+                    " where ";
+            for (int i = 0; i < fields.length-1; i++) {
+                sqlS+=fields[i][1]+"='"+fields[i][2]+"' ";
+                if (i < fields.length - 2) {
+                    sqlS+=" and ";
+                }
+            }
+            sqlS+=";";
+            ResultSet rs = stmt.executeQuery(sqlS);
+            String byteStream="";
+            if (rs.next()) {
+                byteStream = rs.getString(ObjReflect.xuliehua);
+            }
+            stmt.close();
+            conn.close();
+            return ObjReflect.DeserializeFromString(byteStream);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
-
-

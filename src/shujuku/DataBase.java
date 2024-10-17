@@ -37,30 +37,6 @@ public class DataBase {
             throw new RuntimeException(e);
         }
     }
-
-    //    public static boolean TableExist(String tableName){
-//        try{
-//            Class.forName("org.sqlite.JDBC");
-//            // 创建数据库连接
-//            Connection conn = DriverManager.getConnection(url);
-//            // 创建Statement对象来执行SQL语句
-//            Statement stmt = conn.createStatement();
-//
-//            String sql="select name FROM sqlite_master WHERE type='table' AND name='"+ tableName +"';";
-//            if(stmt.execute(sql)){
-//                stmt.close();
-//                conn.close();
-//                return false;
-//            }
-//            stmt.close();
-//            conn.close();
-//            return true;
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
     public static String GetTableName(String clzName) {//查询系统表中是否存在数据表函数
         try {
             //加载驱动类
@@ -107,7 +83,7 @@ public class DataBase {
             throw new RuntimeException(e);
         }
     }
-    //系统表初始化函数————jmy
+    //系统表初始化函数
     public static void InitialTable() {
         try {
             //加载驱动类
@@ -145,13 +121,11 @@ public class DataBase {
             e.printStackTrace();
         }
     }
-
     //创建表函数——表名转换
     public static String switchTableName(String clzName) {
         String tableName = clzName.replace('.', '$');
         return tableName;
     }
-
     //类型转换器
     public static Map<String,String> kindSwitch=new LinkedHashMap<>();
     public static void InitialKindSwitch(){
@@ -183,7 +157,6 @@ public class DataBase {
             }
             //String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
             stmt.execute(sql);
-            //stmt.execute(sql1);
             // 关闭资源
             stmt.close();
             conn.close();
@@ -196,39 +169,39 @@ public class DataBase {
         return UpdateSystemTable(fields, clzName, switchTableName(clzName));
     }
     //创建表函数？？
-    public static boolean CreateTempTable(String clzName, String[][] fields) {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection(url);
-            Statement stmt = conn.createStatement();
-            //表名转换
-            String tableName = "temp_"+switchTableName(clzName);
-            // 创建类数据表SQL语句并执行
-            String sql = "create table if not exists " + tableName + " (";
-            for (int i = 0; i < fields.length; i++) {
-                //数据类型转换！
-                String kind=kindSwitch.get(fields[i][0])!=null?kindSwitch.get(fields[i][0]):"NONE";
-                if (i == 0)
-                    sql = sql + fields[i][1] + " " + kind + " primary key,";
-                else if (i == fields.length - 1)
-                    sql = sql + fields[i][1] + " " + kind + ");";
-                else
-                    sql = sql + fields[i][1] + " " + kind + ",";
-            }
-            String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
-            stmt.execute(sql);
-            stmt.execute(sql1);
-            // 关闭资源
-            stmt.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            return false;
-        } catch (SQLException e) {
-            System.out.println("创建表失败！"+e.getMessage());
-        }
-        //更新系统表
-        return UpdateSystemTable(fields, clzName, switchTableName(clzName));
-    }
+//    public static boolean CreateTempTable(String clzName, String[][] fields) {
+//        try {
+//            Class.forName("org.sqlite.JDBC");
+//            Connection conn = DriverManager.getConnection(url);
+//            Statement stmt = conn.createStatement();
+//            //表名转换
+//            String tableName = "temp_"+switchTableName(clzName);
+//            // 创建类数据表SQL语句并执行
+//            String sql = "create table if not exists " + tableName + " (";
+//            for (int i = 0; i < fields.length; i++) {
+//                //数据类型转换！
+//                String kind=kindSwitch.get(fields[i][0])!=null?kindSwitch.get(fields[i][0]):"NONE";
+//                if (i == 0)
+//                    sql = sql + fields[i][1] + " " + kind + " primary key,";
+//                else if (i == fields.length - 1)
+//                    sql = sql + fields[i][1] + " " + kind + ");";
+//                else
+//                    sql = sql + fields[i][1] + " " + kind + ",";
+//            }
+//            String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
+//            stmt.execute(sql);
+//            stmt.execute(sql1);
+//            // 关闭资源
+//            stmt.close();
+//            conn.close();
+//        } catch (ClassNotFoundException e) {
+//            return false;
+//        } catch (SQLException e) {
+//            System.out.println("创建表失败！"+e.getMessage());
+//        }
+//        //更新系统表
+//        return UpdateSystemTable(fields, clzName, switchTableName(clzName));
+//    }
     //更新Map和Attribute
     //更新属性表 INSERT INTO 表名 (列1, 列2, 列3, ...)
     //VALUES
@@ -263,7 +236,7 @@ public class DataBase {
         }
         return true;
     }
-    //检查列属性是否一致类--gt
+    //检查列属性是否一致类
     public static boolean CheckTabFields(String tableName,String[][] fields) {
         try {
             //连接数据库
@@ -300,7 +273,7 @@ public class DataBase {
         return false;
     }
 
-    //系统表更新系列函数--蒋梦圆
+    //系统表更新系列函数
     //1 增加一列的系统表更新  这一列不能是主键
     public static boolean Alter_column(String clzName,String fieldName,String fieldType){
 //insert into 表名 values(值1,值2,...值n);
@@ -439,19 +412,18 @@ public class DataBase {
 
         return add_columns; // 返回操作结果
     }
-
-    public static void main(String[] args) {
-        // 测试
-        String clzname = "Examples.GtTest"; // clzname
-        String[][] newCols = {
-                {"INT", "new_column2"}, // 添加一个名为new_column1，类型为INT的列
-        };
-
-        boolean result = Add_columns(clzname, newCols);
-        if (result) {
-            System.out.println("列添加成功");
-        } else {
-            System.out.println("列添加失败");
-        }
-    }
+//    public static void main(String[] args) {
+//        // 测试
+//        String clzname = "Examples.GtTest"; // clzname
+//        String[][] newCols = {
+//                {"INT", "new_column2"}, // 添加一个名为new_column1，类型为INT的列
+//        };
+//
+//        boolean result = Add_columns(clzname, newCols);
+//        if (result) {
+//            System.out.println("列添加成功");
+//        } else {
+//            System.out.println("列添加失败");
+//        }
+//    }
 }

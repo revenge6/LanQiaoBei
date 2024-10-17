@@ -1,9 +1,6 @@
 package shujuku;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Field;
 
 public class ObjReflect {
@@ -19,6 +16,29 @@ public class ObjReflect {
     public static boolean isSerializable(Class<?> clazz) {
         // 检查类是否实现了 Serializable 接口
         return Serializable.class.isAssignableFrom(clazz);
+    }
+    //将数据库中的序列化数据反序列化为对象
+    public static Object DeserializeFromString(String byteStream) {
+        if (byteStream == null || byteStream=="") {
+            return null;
+        }
+        try {
+            //根据字符串构造字节序列
+            String[] byteStrings = byteStream.trim().split(" ");
+            byte[] bytes = new byte[byteStrings.length];
+            for (int i = 0; i < byteStrings.length; i++) {
+                bytes[i] = Byte.parseByte(byteStrings[i]);
+            }
+            //反序列化字节序列
+            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            Object temp=ois.readObject();//对象
+            bais.close();
+            ois.close();
+            return temp;
+        } catch (ClassNotFoundException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     //获取序列化字节的字符串形式，每个字节以空格分割
     public static String SerializeToString(Object obj){
