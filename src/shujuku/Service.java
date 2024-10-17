@@ -180,7 +180,6 @@ public class Service {
         }
         return TableRecord.Update(tableName,newFields);
     }
-    //改主键
     public boolean AlterKey(String clzName,String pastKey,String newKey){
         if(pastKey.equals(newKey)){//重复则直接返回
             return true;
@@ -190,7 +189,6 @@ public class Service {
         DataBase.AlterKey(clzName,tableName,pastKey,newKey);
         return true;
     }
-
     public Object Select(String clzName, String persistentStorePriKey, String priKeyValue) {
         String tableName = DataBase.GetTableName(clzName);
         if (tableName !="") {
@@ -199,7 +197,6 @@ public class Service {
             return null;
         }
     }
-
     public Object Select_obj(Object obj) {
         String clzName = ObjReflect.GetClzName(obj);
         String[][] fields=ObjReflect.GetFields(obj);
@@ -210,7 +207,6 @@ public class Service {
             return null;
         }
     }
-
     public Object Select_jk(IPersistentStore obj) {
         String clzName = ObjReflect.GetClzName(obj);
         String tableName = DataBase.GetTableName(clzName);
