@@ -43,7 +43,7 @@ public class Service {
             DataBase.CreateTable(clzName,newFields);
             tableName=DataBase.GetTableName(clzName);
         }
-        return TableRecord.Insert(tableName,newFields);
+        return TableRecord.Add(tableName,newFields);
     }
     public boolean Add(Object obj,String priKey){
         String clzName=ObjReflect.GetClzName(obj);
@@ -76,7 +76,7 @@ public class Service {
             DataBase.CreateTable(clzName,newFields);
             tableName=DataBase.GetTableName(clzName);
         }
-        return TableRecord.Insert(tableName,newFields);
+        return TableRecord.Add(tableName,newFields);
     }
     public boolean Delete(IPersistentStore store){
         String clzName=ObjReflect.GetClzName(store);
@@ -141,7 +141,7 @@ public class Service {
                 DataBase.DeleteTable(tableName);
                 DataBase.CreateTable(clzName,newFields);
                 tableName=DataBase.GetTableName(clzName);
-                return TableRecord.Insert(tableName,newFields);
+                return TableRecord.Add(tableName,newFields);
             }
         }
         return TableRecord.Update(tableName,newFields);
@@ -175,7 +175,7 @@ public class Service {
                 DataBase.DeleteTable(tableName);
                 DataBase.CreateTable(clzName,newFields);
                 tableName=DataBase.GetTableName(clzName);
-                return TableRecord.Insert(tableName,newFields);
+                return TableRecord.Add(tableName,newFields);
             }
         }
         return TableRecord.Update(tableName,newFields);

@@ -11,8 +11,8 @@ public class TableRecord {
         url=dataBase.url;
         this.dataBase=dataBase;
     }
-    //插入记录函数——wym
-    public static boolean Insert(String tableName, String[][] fields) {
+    //插入记录函数
+    public static boolean Add(String tableName, String[][] fields) {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -48,7 +48,7 @@ public class TableRecord {
             return false;
         }
     }
-    //删除一个对象——lab
+    //删除一个对象
     public static boolean Delete(String tableName,String priKey,String priKeyValue) {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -116,7 +116,6 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
-
     public static Object Search(String tableName, String persistentStorePriKey, String priKeyValue){
         try{
             Class.forName("org.sqlite.JDBC");
@@ -140,7 +139,6 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
-
     public static Object Search(String tableName,String[][] fields){
         try {
             Class.forName("org.sqlite.JDBC");

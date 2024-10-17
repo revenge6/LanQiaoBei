@@ -9,7 +9,6 @@ import static shujuku.DataBase.kindSwitch;
 public class TableStructure {
     static String url;
     DataBase dataBase;
-
     public TableStructure(DataBase dataBase) {
         if (DataBase.url == "" || DataBase.url == null)
             return;
@@ -82,7 +81,6 @@ public class TableStructure {
             throw new RuntimeException(e);
         }
     }
-
     //更新列
     private static boolean UpdateList(String tableName, String field, String newFieldType) {
         try {
@@ -183,7 +181,6 @@ public class TableStructure {
             throw new RuntimeException(e);
         }
     }
-
     //改主键-2
     public static boolean AlterKey(String clzName,String tableName, String newKey) {
         try {
