@@ -246,6 +246,4 @@ public class TableStructure {
             throw new RuntimeException(e);
         }
     }
-
-
 }
