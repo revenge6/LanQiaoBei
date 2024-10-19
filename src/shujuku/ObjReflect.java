@@ -131,20 +131,6 @@ public class ObjReflect {
         str[fieldType.length][2]=SerializeToString(obj);
         return str;
     }
-    //
-    public static String[][] GetFields(Object obj,String[] partFields){
-        Reflect(obj);
-        String[][] str=new String[fieldType.length+1][3];//拼接数组
-        for (int i=0;i<fieldType.length;i++){
-            str[i][0]=fieldType[i];
-            str[i][1]=fieldName[i];
-            str[i][2]=fieldValue[i];
-        }
-        str[fieldType.length][0]=GetClzName("");
-        str[fieldType.length][1]=xuliehua;
-        str[fieldType.length][2]=SerializeToString(obj);
-        return str;
-    }
     //反射获取类名
     public static String GetClzName(Object obj){
         Class clazz = obj.getClass();
