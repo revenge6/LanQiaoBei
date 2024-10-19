@@ -92,8 +92,47 @@ public class ObjReflect {
             }
         }
     }
+    //反射获取给定属性的属性值和属性名字符串，用于Select查询
+    public static String[][] GetProperties(Object obj, String[] fieldNames) {
+        Class clazz = obj.getClass();
+        String[] fieldValues = new String[fieldNames.length];
+        for (int i = 0; i < fieldNames.length; i++) {
+            try {
+                // 获取字段
+                Field field = clazz.getDeclaredField(fieldNames[i]);
+                // 设置字段为可访问
+                field.setAccessible(true);
+                // 获取字段的值
+                Object value = field.get(obj);
+                // 将值转换为字符串
+                fieldValues[i] = (value == null) ? "null" : value.toString();
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                fieldValues[i] = "Error";
+            }
+        }
+        String[][] str=new String[fieldNames.length][3];
+        for (int i=0;i<fieldNames.length;i++){
+            str[i][1]=fieldNames[i];
+            str[i][2]=fieldValues[i];
+        }
+        return str;
+    }
     //反射获取属性数组
     public static String[][] GetFields(Object obj){
+        Reflect(obj);
+        String[][] str=new String[fieldType.length+1][3];//拼接数组
+        for (int i=0;i<fieldType.length;i++){
+            str[i][0]=fieldType[i];
+            str[i][1]=fieldName[i];
+            str[i][2]=fieldValue[i];
+        }
+        str[fieldType.length][0]=GetClzName("");
+        str[fieldType.length][1]=xuliehua;
+        str[fieldType.length][2]=SerializeToString(obj);
+        return str;
+    }
+    //
+    public static String[][] GetFields(Object obj,String[] partFields){
         Reflect(obj);
         String[][] str=new String[fieldType.length+1][3];//拼接数组
         for (int i=0;i<fieldType.length;i++){

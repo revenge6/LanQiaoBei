@@ -1,5 +1,7 @@
 package shujuku;
 
+import java.util.List;
+
 public class Service {
 
     public Service(String url){
@@ -189,31 +191,32 @@ public class Service {
         DataBase.AlterKey(clzName,tableName,pastKey,newKey);
         return true;
     }
-    public Object Select(String clzName, String persistentStorePriKey, String priKeyValue) {
+    public Object SelectByID(String clzName, String persistentStorePriKey, String priKeyValue) {
         String tableName = DataBase.GetTableName(clzName);
         if (tableName !="") {
-            return TableRecord.Search(tableName,persistentStorePriKey,priKeyValue);
+            return TableRecord.SearchByID(tableName,persistentStorePriKey,priKeyValue);
         }else {
             return null;
         }
     }
-    public Object Select_obj(Object obj) {
+    public List<Object> SelectByExample(Object obj, String[] partFields) {
         String clzName = ObjReflect.GetClzName(obj);
-        String[][] fields=ObjReflect.GetFields(obj);
+        //String[][] fields=ObjReflect.GetFields(obj);
+        String[][] fields=ObjReflect.GetProperties(obj,partFields);
         String tableName = DataBase.GetTableName(clzName);
         if (tableName !="") {
-            return TableRecord.Search(tableName,fields);
+            return TableRecord.SearchByFields(tableName,fields);
         }else {
             return null;
         }
     }
-    public Object Select_jk(IPersistentStore obj) {
+    public Object SelectByID(IPersistentStore obj) {
         String clzName = ObjReflect.GetClzName(obj);
         String tableName = DataBase.GetTableName(clzName);
         String persistentStorePriKey= obj.getPriKey();
         String priKeyValue= obj.getPriKeyValue();
         if (tableName !="") {
-            return TableRecord.Search(tableName,persistentStorePriKey,priKeyValue);
+            return TableRecord.SearchByID(tableName,persistentStorePriKey,priKeyValue);
         }else {
             return null;
         }

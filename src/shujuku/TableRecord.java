@@ -1,6 +1,8 @@
 package shujuku;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TableRecord {
     static String url;
@@ -116,7 +118,7 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
-    public static Object Search(String tableName, String persistentStorePriKey, String priKeyValue){
+    public static Object SearchByID(String tableName, String persistentStorePriKey, String priKeyValue){
         try{
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -139,7 +141,7 @@ public class TableRecord {
             throw new RuntimeException(e);
         }
     }
-    public static Object Search(String tableName,String[][] fields){
+    public static List<Object> SearchByFields(String tableName,String[][] fields){
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -149,25 +151,28 @@ public class TableRecord {
             String sqlS="select "+ ObjReflect.xuliehua +
                     " from "+tableName +
                     " where ";
-            for (int i = 0; i < fields.length-1; i++) {
+            for (int i = 0; i < fields.length; i++) {
                 sqlS+=fields[i][1]+"='"+fields[i][2]+"' ";
-                if (i < fields.length - 2) {
+                if (i < fields.length -1) {
                     sqlS+=" and ";
                 }
             }
             sqlS+=";";
             ResultSet rs = stmt.executeQuery(sqlS);
             String byteStream="";
-            if (rs.next()) {
+            List<Object> objs=new LinkedList<>();
+            while (rs.next()) {
                 byteStream = rs.getString(ObjReflect.xuliehua);
+                objs.add(ObjReflect.DeserializeFromString(byteStream));
             }
             stmt.close();
             conn.close();
-            return ObjReflect.DeserializeFromString(byteStream);
+            return objs;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
 }
