@@ -1,7 +1,7 @@
 
 package Examples;
 import java.util.List;
-import shujuku.*;
+import SqliteJavaCRUD.*;
 public class DatabaseTest {
     private Service service;
 

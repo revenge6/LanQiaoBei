@@ -1,4 +1,4 @@
-package shujuku;
+package SqliteJavaCRUD;
 
 import java.io.*;
 import java.lang.reflect.Field;

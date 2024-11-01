@@ -1,6 +1,6 @@
 package Examples;
 
-import shujuku.IPersistentStore;
+import SqliteJavaCRUD.IPersistentStore;
 
 import java.io.Serializable;
 

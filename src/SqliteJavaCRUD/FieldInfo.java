@@ -1,4 +1,4 @@
-package shujuku;
+package SqliteJavaCRUD;
 
 public class FieldInfo {
 

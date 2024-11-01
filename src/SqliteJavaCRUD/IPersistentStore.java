@@ -1,4 +1,4 @@
-package shujuku;
+package SqliteJavaCRUD;
 //lab
 public interface IPersistentStore {
     String persistentStorePriKey = "";

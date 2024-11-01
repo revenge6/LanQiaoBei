@@ -1,10 +1,10 @@
-package shujuku;
+package SqliteJavaCRUD;
 
 import java.sql.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static shujuku.DataBase.kindSwitch;
+import static SqliteJavaCRUD.DataBase.kindSwitch;
 
 public class TableStructure {
     static String url;

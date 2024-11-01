@@ -1,4 +1,4 @@
-package shujuku;
+package SqliteJavaCRUD;
 
 import java.util.List;
 

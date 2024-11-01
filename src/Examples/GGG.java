@@ -14,4 +14,14 @@ public class GGG implements Serializable {
         this.grade=grade;
         this.name=name;
     }
+
+    @Override
+    public String toString() {
+        return "GGG{" +
+                "age=" + age +
+                ", id=" + id +
+                ", grade='" + grade + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
