@@ -7,6 +7,8 @@ import java.util.Map;
 public class DataBase {
     static String url;
 
+    //类型转换器
+    public static Map<String,String> kindSwitch=new LinkedHashMap<>();
     public DataBase(String url) {
         this.url = url;
         InitialTable();
@@ -126,8 +128,7 @@ public class DataBase {
         String tableName = clzName.replace('.', '$');
         return tableName;
     }
-    //类型转换器
-    public static Map<String,String> kindSwitch=new LinkedHashMap<>();
+    //初始化类型转换器
     public static void InitialKindSwitch(){
         kindSwitch.put("int","INTEGER");
         kindSwitch.put(ObjReflect.GetClzName((int)1),"INTEGER");
@@ -168,40 +169,6 @@ public class DataBase {
         //更新系统表
         return UpdateSystemTable(fields, clzName, switchTableName(clzName));
     }
-    //创建表函数？？
-//    public static boolean CreateTempTable(String clzName, String[][] fields) {
-//        try {
-//            Class.forName("org.sqlite.JDBC");
-//            Connection conn = DriverManager.getConnection(url);
-//            Statement stmt = conn.createStatement();
-//            //表名转换
-//            String tableName = "temp_"+switchTableName(clzName);
-//            // 创建类数据表SQL语句并执行
-//            String sql = "create table if not exists " + tableName + " (";
-//            for (int i = 0; i < fields.length; i++) {
-//                //数据类型转换！
-//                String kind=kindSwitch.get(fields[i][0])!=null?kindSwitch.get(fields[i][0]):"NONE";
-//                if (i == 0)
-//                    sql = sql + fields[i][1] + " " + kind + " primary key,";
-//                else if (i == fields.length - 1)
-//                    sql = sql + fields[i][1] + " " + kind + ");";
-//                else
-//                    sql = sql + fields[i][1] + " " + kind + ",";
-//            }
-//            String sql1="ALTER TABLE "+tableName+" ADD COLUMN Byte_Stream BLOB ;";//对于创建好的表增加一列字节流属性
-//            stmt.execute(sql);
-//            stmt.execute(sql1);
-//            // 关闭资源
-//            stmt.close();
-//            conn.close();
-//        } catch (ClassNotFoundException e) {
-//            return false;
-//        } catch (SQLException e) {
-//            System.out.println("创建表失败！"+e.getMessage());
-//        }
-//        //更新系统表
-//        return UpdateSystemTable(fields, clzName, switchTableName(clzName));
-//    }
     //更新Map和Attribute
     //更新属性表 INSERT INTO 表名 (列1, 列2, 列3, ...)
     //VALUES
@@ -272,11 +239,10 @@ public class DataBase {
         }
         return false;
     }
-
     //系统表更新系列函数
+
     //1 增加一列的系统表更新  这一列不能是主键
     public static boolean Alter_column(String clzName,String fieldName,String fieldType){
-//insert into 表名 values(值1,值2,...值n);
         try {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
@@ -412,18 +378,4 @@ public class DataBase {
 
         return add_columns; // 返回操作结果
     }
-//    public static void main(String[] args) {
-//        // 测试
-//        String clzname = "Examples.GtTest"; // clzname
-//        String[][] newCols = {
-//                {"INT", "new_column2"}, // 添加一个名为new_column1，类型为INT的列
-//        };
-//
-//        boolean result = Add_columns(clzname, newCols);
-//        if (result) {
-//            System.out.println("列添加成功");
-//        } else {
-//            System.out.println("列添加失败");
-//        }
-//    }
 }

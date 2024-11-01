@@ -2,6 +2,8 @@ package Examples;
 
 import SqliteJavaCRUD.*;
 
+import java.util.List;
+
 //实践类，测试代码运行结果
 public class Test {
     public static void main(String[] args) {
@@ -47,5 +49,12 @@ public class Test {
         //后面两个对象都存在
         System.out.println(service.SelectByID(ObjReflect.GetClzName(objs2[0]),"id","1"));
         System.out.println(service.SelectByID(ObjReflect.GetClzName(objs2[0]),"id","2"));
+        System.out.println("===========================");
+        //
+        service.Add(new GtTest(11,3,"93","a3"));
+        List<Object> list = service.SelectByExample(objs1[1],new String[]{"age"});
+        for (Object obj: list){
+            System.out.println(obj);
+        }
     }
 }

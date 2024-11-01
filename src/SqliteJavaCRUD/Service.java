@@ -9,11 +9,13 @@ public class Service {
         DataBase.InitialTable();
         DataBase.InitialKindSwitch();
     }
+    //设置URL
     public static void setURL(String url){
         DataBase.url=url;
         TableRecord.url=url;
         TableStructure.url =url;
     }
+    //数据库增加
     public boolean Add(IPersistentStore store){
         String clzName=ObjReflect.GetClzName(store);
         String tableName=DataBase.GetTableName(clzName);
@@ -80,6 +82,7 @@ public class Service {
         }
         return TableRecord.Add(tableName,newFields);
     }
+    //数据库删除
     public boolean Delete(IPersistentStore store){
         String clzName=ObjReflect.GetClzName(store);
         String tableName=DataBase.GetTableName(clzName);
@@ -113,6 +116,7 @@ public class Service {
         }
         return TableRecord.Delete(tableName,priKey,priKeyValue);
     }
+    //数据库更新
     public boolean Update(IPersistentStore store){
         String clzName=ObjReflect.GetClzName(store);
         String tableName=DataBase.GetTableName(clzName);
@@ -182,6 +186,7 @@ public class Service {
         }
         return TableRecord.Update(tableName,newFields);
     }
+    //更改主键
     public boolean AlterKey(String clzName,String pastKey,String newKey){
         if(pastKey.equals(newKey)){//重复则直接返回
             return true;
@@ -191,6 +196,7 @@ public class Service {
         DataBase.AlterKey(clzName,tableName,pastKey,newKey);
         return true;
     }
+    //数据库查询
     public Object SelectByID(String clzName, String persistentStorePriKey, String priKeyValue) {
         String tableName = DataBase.GetTableName(clzName);
         if (tableName !="") {
@@ -221,5 +227,4 @@ public class Service {
             return null;
         }
     }
-
 }
