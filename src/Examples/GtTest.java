@@ -6,16 +6,6 @@ import java.io.Serializable;
 
 //以这个类为测试类，将类的实例对象添加到数据库中
 public class GtTest implements IPersistentStore, Serializable {
-//    int age;
-//    int id;
-//    int grade;
-//    String name;
-//    public GtTest(int age, int id,int grade,String name) {
-//        this.age = age;
-//        this.id = id;
-//        this.grade=grade;
-//        this.name=name;
-//    }
 
     int age;
     int id;

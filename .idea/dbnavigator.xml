@@ -54,6 +54,7 @@
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Map" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Examples$GtTest" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.shujuku$GtTest" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Examples$Complex" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Examples$GGG" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.Attribute" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="e46c0daa-7877-4be1-b00d-e87f360356b0" dataset="test.gt" active-filter-id="EMPTY_FILTER" />

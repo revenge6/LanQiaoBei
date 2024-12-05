@@ -70,15 +70,18 @@ public class DatabaseTest {
         // 测试嵌套对象和反序列化
         // 此测试需要你有一个嵌套对象的类和相应的数据库操作
         // 由于你的代码中没有嵌套对象的示例，我将跳过这部分的实现
+        Complex a=new Complex(1,2);
+        boolean flag=service.Add(a);
+        assert flag:"添加对象失败！";
     }
 
     public static void main(String[] args) {
-        String dbUrl = "jdbc:sqlite:your_database_path.db";
+        String dbUrl = "jdbc:sqlite:D:\\java\\idea-workspace\\LanQiaoBei\\test.db";
         DatabaseTest test = new DatabaseTest(dbUrl);
 
-        test.testBasicFunctionality();
-        test.testParallelDataRetrieval();
-        test.testThroughput();
-        // test.testExceptionHandling(); // 需要嵌套对象的支持
+//        test.testBasicFunctionality();
+//        test.testParallelDataRetrieval();
+//        test.testThroughput();
+         test.testExceptionHandling(); // 需要嵌套对象的支持
     }
 }

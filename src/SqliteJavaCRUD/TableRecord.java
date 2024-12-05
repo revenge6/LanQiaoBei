@@ -43,7 +43,7 @@ public class TableRecord {
             conn.close();
             return count > 0;
         } catch (SQLException e) {
-            System.out.println("插入对象失败，已添加过相同主键值对象！");
+            //System.out.println("插入对象失败，已添加过相同主键值对象！");
             return false;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

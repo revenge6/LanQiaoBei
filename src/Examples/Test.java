@@ -50,7 +50,7 @@ public class Test {
         System.out.println(service.SelectByID(ObjReflect.GetClzName(objs2[0]),"id","1"));
         System.out.println(service.SelectByID(ObjReflect.GetClzName(objs2[0]),"id","2"));
         System.out.println("===========================");
-        //
+
         service.Add(new GtTest(11,3,"93","a3"));
         List<Object> list = service.SelectByExample(objs1[1],new String[]{"age"});
         for (Object obj: list){
