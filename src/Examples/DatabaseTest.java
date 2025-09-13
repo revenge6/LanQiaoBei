@@ -38,32 +38,48 @@ public class DatabaseTest {
 
     public void testThroughput() {
         // 测试吞吐量
+        int testCount = 1000; // 测试次数
         GtTest testObject = new GtTest(1, 1, "20", "test");
+        
+        // 预先创建测试对象数组，避免创建对象的时间影响测试结果
+        GtTest[] addObjects = new GtTest[testCount];
+        GtTest[] updateObjects = new GtTest[testCount];
+        for (int i = 0; i < testCount; i++) {
+            addObjects[i] = new GtTest(1, i, "20", "test");
+            updateObjects[i] = new GtTest(2, i, "21", "updated");
+        }
+        
+        // 测试添加操作
         long startTime = System.currentTimeMillis();
-
-        // 循环添加同一个对象10次
-        for (int i = 0; i < 10; i++) {
-            service.Add(testObject);
+        for (int i = 0; i < testCount; i++) {
+            service.Add(addObjects[i]);
         }
-
         long endTime = System.currentTimeMillis();
-        System.out.println("添加10次对象耗时：" + (endTime - startTime) + "ms");
-
-        // 循环删除同一个对象10次
+        System.out.println("添加" + testCount + "次对象耗时：" + (endTime - startTime) + "ms");
+        
+        // 测试查询操作
         startTime = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++) {
-            service.Delete(testObject);
+        for (int i = 0; i < testCount; i++) {
+            Object result = service.SelectByID(ObjReflect.GetClzName(testObject), "id", String.valueOf(i));
         }
         endTime = System.currentTimeMillis();
-        System.out.println("删除10次对象耗时：" + (endTime - startTime) + "ms");
-
-        // 循环更新同一个对象1000次
+        System.out.println("查询" + testCount + "次对象耗时：" + (endTime - startTime) + "ms");
+        
+        // 测试更新操作
         startTime = System.currentTimeMillis();
-        for (int i = 0; i < 1000; i++) {
-            service.Update(testObject);
+        for (int i = 0; i < testCount; i++) {
+            service.Update(updateObjects[i], "id");
         }
         endTime = System.currentTimeMillis();
-        System.out.println("更新1000次对象耗时：" + (endTime - startTime) + "ms");
+        System.out.println("更新" + testCount + "次对象耗时：" + (endTime - startTime) + "ms");
+        
+        // 测试删除操作
+        startTime = System.currentTimeMillis();
+        for (int i = 0; i < testCount; i++) {
+            service.Delete(ObjReflect.GetClzName(testObject), "id", String.valueOf(i));
+        }
+        endTime = System.currentTimeMillis();
+        System.out.println("删除" + testCount + "次对象耗时：" + (endTime - startTime) + "ms");
     }
 
     public void testExceptionHandling() {
@@ -81,7 +97,7 @@ public class DatabaseTest {
 
 //        test.testBasicFunctionality();
 //        test.testParallelDataRetrieval();
-//        test.testThroughput();
-         test.testExceptionHandling(); // 需要嵌套对象的支持
+        test.testThroughput();
+//         test.testExceptionHandling(); // 需要嵌套对象的支持
     }
 }

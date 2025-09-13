@@ -37,10 +37,10 @@ public class Service {
         }
         if(tableName!=""){
             if(!DataBase.CheckTabFields(tableName,newFields)){
-                TableStructure.UpdateTable(tableName,newFields);
+//                TableStructure.UpdateTable(tableName,newFields);
                 //直接重新创建表更稳妥
-//                DataBase.DeleteTable(tableName);
-//                DataBase.CreateTable(clzName,newFields);
+                DataBase.DeleteTable(tableName);
+                DataBase.CreateTable(clzName,newFields);
                 //tableName=DataBase.GetTableName(clzName);
             }
         }else {
